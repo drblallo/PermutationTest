@@ -2,6 +2,9 @@
 #include "utils.h"
 #include <stdlib.h>
 
+//creates a permutation struct, the underlying memory is shared among all the
+//copies of the same permutation
+//must be manually liberated
 Permutation permutationCreate(int lenght)
 {
 	Permutation p;

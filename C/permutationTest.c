@@ -13,31 +13,7 @@ int compare(const void * a, const void * b)
 	return 1; 
 }
 
-float evaluateStatistic(const TestData* data)
-{
-	float v1 = 0;
-	float v2 = 0;
-	for (unsigned a = 0; a < data->cutPoint; a++)
-		v1 += data->sample[a];
-
-	v1 /= data->cutPoint;
-
-	for (unsigned a = data->cutPoint; a < data->sampleLenght; a++)
-		v2 += data->sample[a];
-
-	v2 /= data->sampleLenght - data->cutPoint;
-
-   // printf("%f %f\n", v1, v2);
-
-	v1 -= v2;
-
-	if (v1 < 0)
-		v1 *= -1;
-
-	return v1;
-}
-
-float evaluateStatisticWithPermutation(const TestData* data, const Permutation* permutation)
+float evaluateStatistic(const TestData* data, const Permutation* permutation)
 {
 	float v1 = 0;
 	float v2 = 0;
@@ -59,23 +35,27 @@ float evaluateStatisticWithPermutation(const TestData* data, const Permutation* 
 	return v1;
 }
 
+int permutationTestGetK(const TestData* data)
+{
+	return data->iterationsCount - ((int) (data->alpha * data->iterationsCount));
+}
+
 int runPermutationTest(const TestData* data)
 {
     float statistics[data->iterationsCount];
-	float sampleStatistic = evaluateStatistic(data);
-    //printf("sample: %f\n", sampleStatistic);
+	Permutation permutation = permutationCreate(data->sampleLenght);
+	float sampleStatistic = evaluateStatistic(data, &permutation); //non permutated statistic
 	
 	unsigned equalOccurences = 0;
 	unsigned higherOccurences = 0;
+	int toBeReturned = 0;
 
-	Permutation permutation = permutationCreate(data->sampleLenght);
 
+	//calculate permutated statistics
 	for (unsigned a = 0; a < data->iterationsCount; a++)
 	{
 		permutationRandomize(permutation);
-		//for (int a = 0; a < data->sampleLenght; a++)
-		//	printf("%d\n", permutation.indicies[a]);
-		statistics[a] = evaluateStatisticWithPermutation(data, &permutation);
+		statistics[a] = evaluateStatistic(data, &permutation);
 
 		if (statistics[a] == sampleStatistic)
 			equalOccurences++;
@@ -84,34 +64,27 @@ int runPermutationTest(const TestData* data)
 			higherOccurences++;
 	}
 	
+	//sort statistics
     qsort(statistics, data->iterationsCount, sizeof (float), compare);
-	int k = data->iterationsCount - ((int)(data->alpha * data->iterationsCount));
-    //for (int a = 0; a < data->iterationsCount; a++)
-    //    printf("%f\n", statistics[a]);
-
-    //printf ("k: %f\n", statistics[k]);
+	int k = permutationTestGetK(data);
 	
 	if (statistics[k] > sampleStatistic)
-	{
-		permutationDestory(permutation);
-		return 1;
-	}
+		toBeReturned = 1;
 
 	if (statistics[k] < sampleStatistic)
-	{
-		permutationDestory(permutation);
-		return 0;
-	}
+		toBeReturned = 0;
 
-	float treshold = (data->alpha*data->iterationsCount) - higherOccurences;
-	treshold /= equalOccurences;
-
-	if (randomFloat(0, 1) > treshold)
+	if (statistics[k] == sampleStatistic)
 	{
-		permutationDestory(permutation);
-		return 0;
+		float treshold = (data->alpha * data->iterationsCount) - higherOccurences;
+		treshold /= equalOccurences;
+
+		if (randomFloat(0, 1) > treshold)
+			toBeReturned = 0;
+		else
+			toBeReturned = 1;
 	}
 
 	permutationDestory(permutation);
-	return 1;
+	return toBeReturned;
 }

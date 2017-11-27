@@ -8,32 +8,37 @@
 #define CUT_POINT 50
 #define PERMUTATIONS 1000
 
+void generateSample(TestData* data)
+{
+		for (int b = 0; b < CUT_POINT; b++)
+            data->sample[b] = randomFloat();
+
+		for (unsigned b = CUT_POINT; b < data->sampleLenght; b++)
+            data->sample[b] = randomFloat();
+}
+
 int main()
 {
 	int count = 0;
+
+	//set up data
 	TestData data;
 	data.alpha = ALPHA;
 	data.iterationsCount = PERMUTATIONS;
 	data.cutPoint = CUT_POINT;
 	data.sampleLenght = SAMPLE_SIZE;
 	data.sample = (float*)malloc(sizeof(float)*data.sampleLenght);
+
+	//run tests
 	for (int a = 0; a < ITERATIONS; a++)
 	{
-		for (int b = 0; b < CUT_POINT; b++)
-		{
-            data.sample[b] = randomFloat();//distribution(generator);
-           // printf("%f\n", data.sample[b]);
-		}
-		for (unsigned b = CUT_POINT; b < data.sampleLenght; b++)
-		{
-            data.sample[b] = randomFloat();//distribution(generator);
-            //printf("%f\n", data.sample[b]);
-        }
-
+		generateSample(&data);
 		count += runPermutationTest(&data);
 	}
 
+	//report tests
 	printf("%d out of %d\n", count, ITERATIONS);
 
+	//clean up
     free (data.sample);
 }

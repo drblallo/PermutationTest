@@ -13,5 +13,6 @@ typedef struct td
 typedef struct prm Permutation;
 
 int runPermutationTest(const TestData* data);
-float evaluateStatistic(const TestData* data);
-float evaluateStatisticWithPermutation(const TestData* data, const Permutation* permutation);
+float evaluateStatistic(const TestData* data, const Permutation* permutation);
+int runPermutationTest(const TestData* data);
+
