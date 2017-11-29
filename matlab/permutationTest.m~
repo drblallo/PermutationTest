@@ -10,30 +10,29 @@ function successPercent = permutationTest()
     builtInTestSuccess = 0;
     
     
-    for a = 50:numberOfPermutation
-        successPercent = 0;
+%    for a = 50:numberOfPermutation
+%        successPercent = 0;
         for t = 1:numberOfIterations
-            sample = generateSample(sampleSize);       
+%            sample = generateSample(sampleSize);       
             successPercent = successPercent + runPermutationTest(sample, alpha, cutPoint, a);
             %builtInTestSuccess = builtInTestSuccess + mwtest(sample, cutPoint, sampleSize);
             %builtInTestSuccess = builtInTestSuccess + ttest(sample, cutPoint, sampleSize);
 
         end
         successData(a - 49) = successPercent/a;
-        disp(a);
     end
      
     y = linspace(50, numberOfPermutation, numberOfPermutation - 49);
     disp(size(y));
     disp(size(successData));
-    disp(builtInTestSuccess/numberOfIterations);
+    %disp(builtInTestSuccess/numberOfIterations*100);
     scatter(y, successData);
     successPercent = successPercent/numberOfIterations*100;
 end
 
 function sample = generateSample(sampleSize)
     sample = normrnd(0, 1, [sampleSize/2, 1]);
-    sample2 = normrnd(0.5, 1, [sampleSize/2, 1]);
+    sample2 = normrnd(0.2, 1, [sampleSize/2, 1]);
     sample = cat(1, sample, sample2);
 end
 
@@ -94,7 +93,7 @@ end
 function h0Accepted = runPermutationTest(sample, alpha, cutPoint, numberOfP)
 
     statistics = zeros(1, numberOfP);    
-    sampleStatistic = evaluateStatisticMW(sample, cutPoint);
+    sampleStatistic = evaluateStatistic(sample, cutPoint);
     equalOccurences = 0;
     higherOccurences = 0;
     lenght = size(sample);
@@ -108,7 +107,7 @@ function h0Accepted = runPermutationTest(sample, alpha, cutPoint, numberOfP)
     
     
     for t = 1:numberOfP
-        statistics(t) = evaluateStatisticMW(sample(randperm(lenght)), cutPoint); 
+        statistics(t) = evaluateStatistic(sample(randperm(lenght)), cutPoint); 
         
         if (statistics(t) == sampleStatistic)
             equalOccurences = equalOccurences + 1;
