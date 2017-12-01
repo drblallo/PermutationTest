@@ -1,5 +1,6 @@
 #include "permutationTest.h"
 #include "utils.h"
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -15,6 +16,12 @@ int compare(const void * a, const void * b)
 
 float evaluateStatistic(const TestData* data, const Permutation* permutation)
 {
+	float v = mannWitheyTest(data, permutation);
+	return v;
+}
+
+float evaluateStatisticMean(const TestData* data, const Permutation* permutation)
+{
 	float v1 = 0;
 	float v2 = 0;
 	for (unsigned a = 0; a < data->cutPoint; a++)
@@ -27,12 +34,113 @@ float evaluateStatistic(const TestData* data, const Permutation* permutation)
 
 	v2 /= data->sampleLenght - data->cutPoint;
 
+
 	v1 -= v2;
 
 	if (v1 < 0)
 		v1 *= -1;
 
 	return v1;
+}
+
+void merge(float** ranksOut, int left, int center, int right)
+{
+	int i = left;
+	int j = center;
+	int k = 0;
+	float* b[right-left+1];
+
+	while (i < center && j < right)
+	{
+		//printf ("%d %d\n", );
+		if (*(ranksOut[i]) <= *(ranksOut[j]))
+		{
+			b[k] = ranksOut[i];	
+			i++;
+		}
+		else
+		{
+			b[k] = ranksOut[j];
+			j++;
+		}
+		k++;
+	}
+
+	while (i < center)
+	{
+		b[k] = ranksOut[i];
+		i++;
+		k++;
+	}
+
+	while (j < right)
+	{
+		b[k] = ranksOut[j];
+		j++;
+		k++;
+	}
+
+	for (k = left; k < right; k++)
+		ranksOut[k] = b[k-left];
+}
+
+void calculateRanks(float** ranksOut, int left, int right)
+{
+	int center;
+	if (left + 1>= right)
+		return;
+
+	center = (left+right)/2;
+	calculateRanks(ranksOut, left, center);
+	calculateRanks(ranksOut, center, right);
+
+	merge(ranksOut, left, center, right);
+}
+
+float mannWitheyTest(const TestData* data, const Permutation* permutation)
+{
+	float** ranks = (float**)malloc(data->sampleLenght * sizeof(float*));	
+	float* values = (float*)malloc(data->sampleLenght * sizeof(float));	
+	float l1 = data->sampleLenght - data->cutPoint;
+	float l0 = data->cutPoint;
+	
+	
+	for (unsigned a = 0; a < data->sampleLenght; a++)
+	{
+		values[a] = data->sample[permutation->indicies[a]];
+		ranks[a] = values + a;
+	}
+	calculateRanks(ranks, 0, data->sampleLenght);
+
+	float u1 = 0;
+	float u2 = 0;
+
+	for (unsigned a = 0; a < data->sampleLenght; a++)
+	{
+		//printf("%d %f\n", ranks[a]-data->sample, *ranks[a]);
+		if (ranks[a] - values < l0)
+			u1 += a;
+		else
+			u2 += a;
+	}
+
+	u1 -= (l0*(l0+1))/2;
+
+	//u2 -= ((data->sampleLenght-data->cutPoint)*((data->sampleLenght-data->cutPoint)+1))/2;
+	//printf("%f %f\n", u1, u2);
+
+	free(ranks);
+	free(values);
+	//if (u2 > u1)
+	//	return u1;
+	//else
+	//	return u2;
+	
+	float mu = l0 * l1;
+	float sd = sqrt(l0 * l1 * (l1+l0+1) / 12.0f); 
+	u1 = fabs((u1-mu)/sd);
+	//printf("%f\n", u1);
+	return u1;
 }
 
 int permutationTestGetK(const TestData* data)
@@ -79,7 +187,7 @@ int runPermutationTest(const TestData* data)
 		float treshold = (data->alpha * data->iterationsCount) - higherOccurences;
 		treshold /= equalOccurences;
 
-		if (randomFloat(0, 1) > treshold)
+		if (randomFloat() > treshold)
 			toBeReturned = 0;
 		else
 			toBeReturned = 1;
@@ -87,4 +195,15 @@ int runPermutationTest(const TestData* data)
 
 	permutationDestory(permutation);
 	return toBeReturned;
+}
+
+void testDataClone(TestData* newOne, const TestData* toCopy)
+{
+	newOne->sample = (float*) malloc(sizeof(float) * toCopy->sampleLenght);
+	newOne->alpha = toCopy->alpha;
+	newOne->sampleLenght = toCopy->sampleLenght;
+	newOne->cutPoint = toCopy->cutPoint;
+	newOne->iterationsCount = toCopy->iterationsCount;
+	for (unsigned a = 0; a < toCopy->sampleLenght; a++)
+		newOne->sample[a] = toCopy->sample[a];
 }

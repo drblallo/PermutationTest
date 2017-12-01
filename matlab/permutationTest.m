@@ -3,7 +3,7 @@ function successPercent = permutationTest()
     numberOfPermutation = 1000; %M
     sampleSize = 100; %N
     cutPoint = 50; %m 
-    numberOfIterations = 100;
+    numberOfIterations = 1000;
     
     successPercent = 0;
     successData = zeros(1, numberOfPermutation - 50);
@@ -13,62 +13,61 @@ function successPercent = permutationTest()
     for a = 50:numberOfPermutation
         successPercent = 0;
         for t = 1:numberOfIterations
-            sample = generateSample(sampleSize);       
-            successPercent = successPercent + runPermutationTest(sample, alpha, cutPoint, a);
+            [sample, sample2] = generateSample(sampleSize);       
+            successPercent = successPercent + runPermutationTest(sample, sample2, alpha, a);
             %builtInTestSuccess = builtInTestSuccess + mwtest(sample, cutPoint, sampleSize);
             %builtInTestSuccess = builtInTestSuccess + ttest(sample, cutPoint, sampleSize);
 
         end
-        successData(a - 49) = successPercent/a;
+        successData(a - 49) = successPercent/numberOfIterations;
         disp(a);
     end
      
     y = linspace(50, numberOfPermutation, numberOfPermutation - 49);
     disp(size(y));
+    disp(successData);
     disp(size(successData));
-    disp(builtInTestSuccess/numberOfIterations);
+    %disp(builtInTestSuccess/numberOfIterations);
     scatter(y, successData);
     successPercent = successPercent/numberOfIterations*100;
 end
 
-function sample = generateSample(sampleSize)
+function [sample, sample2] = generateSample(sampleSize)
     sample = normrnd(0, 1, [sampleSize/2, 1]);
-    sample2 = normrnd(0.5, 1, [sampleSize/2, 1]);
-    sample = cat(1, sample, sample2);
+    sample2 = normrnd(0, 1, [sampleSize/2, 1]);
 end
 
-function success = ttest(sample, cutPoint, sampleSize)
-    x = sample(1:cutPoint);
-    y = sample(cutPoint+1:sampleSize);
-    success = 1-ttest2(x, y);   
+function success = ttest(sample, sample2)
+    success = 1-ttest2(sample, sample2);   
 end
 
-function success = mwtest(sample, cutPoint, sampleSize)
-    x = sample(1:cutPoint);
-    y = sample(cutPoint+1:sampleSize);
-    [p, h] = ranksum(x, y);
+function success = mwtest(sample, sample2)
+    [p, h] = ranksum(sample, sample2);
     success = 1-h;
 end
 
-function statistic = evaluateStatistic(sample, cutPoint)
+function statistic = evaluateStatistic(sample, sample2)
     
     a = 0;
     b = 0;
     
-    lenght = size(sample);
-    lenght = lenght(1);
+    %for t = 1:cutPoint
+    %    a = a + sample(t);
+    %end
     
-    for t = 1:cutPoint
-        a = a + sample(t);
-    end
     
-    a = a / cutPoint;
+    %a = a / cutPoint;
     
-    for t = cutPoint+1:lenght
-        b = b + sample(t);
-    end
+    a = mean(sample);
+    
+    %for t = cutPoint+1:lenght
+    %    b = b + sample(t);
+    %end
+   
 
-    b = b / (lenght - cutPoint);
+    %b = b / (lenght - cutPoint);
+    
+    b = mean(sample);
     
     statistic = a - b;
     if (statistic < 0)
@@ -77,12 +76,9 @@ function statistic = evaluateStatistic(sample, cutPoint)
     
 end
 
-function statistic = evaluateStatisticMW(sample, cutPoint)
-    lenght = size(sample);
-    lenght = lenght(1);
-    x = sample(1:cutPoint);
-    y = sample(cutPoint+1:lenght);
-    [p, h, stat] = ranksum(x, y);
+function statistic = evaluateStatisticMW(sample, sample2)
+   
+    [p, h, stat] = ranksum(sample, sample2);
     statistic = stat.zval;
     %disp(statistic);
     
@@ -91,15 +87,16 @@ function statistic = evaluateStatisticMW(sample, cutPoint)
     end
 end
 
-function h0Accepted = runPermutationTest(sample, alpha, cutPoint, numberOfP)
+function h0Accepted = runPermutationTest(sample, sample2, alpha, numberOfP)
 
     statistics = zeros(1, numberOfP);    
-    sampleStatistic = evaluateStatisticMW(sample, cutPoint);
+    sampleStatistic = evaluateStatistic(sample, sample2);
     equalOccurences = 0;
     higherOccurences = 0;
     lenght = size(sample);
     lenght = lenght(1);
-    
+    lenght2 = size(sample2);
+    lenght2 = lenght2(1);
     %disp(alpha);
     %disp(cutPoint);
     %disp(numberOfP);
@@ -108,7 +105,7 @@ function h0Accepted = runPermutationTest(sample, alpha, cutPoint, numberOfP)
     
     
     for t = 1:numberOfP
-        statistics(t) = evaluateStatisticMW(sample(randperm(lenght)), cutPoint); 
+        statistics(t) = evaluateStatistic(sample(randperm(lenght)), sample2(randperm(lenght2))); 
         
         if (statistics(t) == sampleStatistic)
             equalOccurences = equalOccurences + 1;

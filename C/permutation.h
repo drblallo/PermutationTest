@@ -9,3 +9,4 @@ typedef struct prm
 Permutation permutationCreate(int lenght);
 void permutationDestory(Permutation permutation);
 void permutationRandomize(Permutation permutation);
+
