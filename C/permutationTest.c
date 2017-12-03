@@ -16,7 +16,7 @@ int compare(const void * a, const void * b)
 
 float evaluateStatistic(const TestData* data, const Permutation* permutation)
 {
-	float v = mannWitheyTest(data, permutation);
+	float v = hotelintTest(data, permutation);
 	return v;
 }
 
@@ -41,6 +41,101 @@ float evaluateStatisticMean(const TestData* data, const Permutation* permutation
 		v1 *= -1;
 
 	return v1;
+}
+
+float hotelintTest(const TestData* data, const Permutation* toCopy)
+{
+	Vector mean;
+	Vector mean2;
+	for (unsigned b = 0; b < VECTOR_SIZE; b++)
+	{
+		mean[b] = 0;
+		for (unsigned a = 0; a < data->cutPoint; a++)
+			mean[b] += data->vectorSample[toCopy->indicies[a]][b]; 
+		mean[b] /= data->sampleLenght;
+
+		mean2[b] = 0;
+		for (unsigned a = data->cutPoint; a < data->sampleLenght; a++)
+			mean2[b] += data->vectorSample[toCopy->indicies[a]][b]; 
+		mean2[b] /= data->sampleLenght;
+	}
+
+	float** matrix = (float**) malloc(VECTOR_SIZE * sizeof(float*));
+	float** matrix2 = (float**) malloc(VECTOR_SIZE * sizeof(float*));
+
+	for (unsigned a = 0; a < VECTOR_SIZE; a++)
+	{
+		matrix[a] = (float*) malloc(VECTOR_SIZE* sizeof(float));
+		matrix2[a] = (float*) malloc(VECTOR_SIZE* sizeof(float));
+	}
+	for (unsigned a = 0; a < VECTOR_SIZE; a++)
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+		{
+			matrix[a][b] = 0;
+			matrix2[a][b] = 0;
+		}
+
+	for (unsigned a = 0; a < data->cutPoint; a++)
+	{
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+		{
+			for (unsigned c = 0; c < VECTOR_SIZE; c++)
+			{
+				float t = (data->vectorSample[toCopy->indicies[a]][b] - mean[b]);
+				float r = (data->vectorSample[toCopy->indicies[a]][c] - mean[c]);
+				matrix[b][c] += t * r; 
+			}
+		}
+	}
+
+	for (unsigned a = data->cutPoint; a < data->sampleLenght; a++)
+	{
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+		{
+			for (unsigned c = 0; c < VECTOR_SIZE; c++)
+			{
+				float t = (data->vectorSample[toCopy->indicies[a]][b] - mean2[b]);
+				float r = (data->vectorSample[toCopy->indicies[a]][c] - mean2[c]);
+				matrix2[b][c] += t * r; 
+			}
+		}
+	}
+
+	for (unsigned a = 0; a < VECTOR_SIZE; a++)
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+			matrix[a][b] = (matrix[a][b] + matrix2[a][b]) / (data->sampleLenght + 2);
+
+	float determinante = Determinant(matrix, VECTOR_SIZE);
+
+
+	for (unsigned a = 0; a < VECTOR_SIZE; a++)
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+			matrix[a][b] /= determinante;
+
+	Vector partial;
+
+	for (unsigned a = 0; a < VECTOR_SIZE; a++)
+	{
+		partial[a] = 0;
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+			partial[a] += matrix[a][b] * (mean[b] - mean2[b]);
+	}
+
+	float out = 0;
+	for (unsigned a = 0; a < VECTOR_SIZE; a++)
+		out += (mean[a] - mean2[a]) * partial[a];
+
+	for (int a = 0; a < VECTOR_SIZE; a++)
+	{
+		free(matrix[a]);
+		free(matrix2[a]);
+	}
+	free (matrix);
+	free (matrix2);
+
+
+	return out;
+
 }
 
 void merge(float** ranksOut, int left, int center, int right)
@@ -199,11 +294,35 @@ int runPermutationTest(const TestData* data)
 
 void testDataClone(TestData* newOne, const TestData* toCopy)
 {
-	newOne->sample = (float*) malloc(sizeof(float) * toCopy->sampleLenght);
 	newOne->alpha = toCopy->alpha;
 	newOne->sampleLenght = toCopy->sampleLenght;
 	newOne->cutPoint = toCopy->cutPoint;
 	newOne->iterationsCount = toCopy->iterationsCount;
-	for (unsigned a = 0; a < toCopy->sampleLenght; a++)
-		newOne->sample[a] = toCopy->sample[a];
+	if (toCopy->sample)
+	{
+		newOne->sample = (float*) malloc(sizeof(float) * toCopy->sampleLenght);
+		for (unsigned a = 0; a < toCopy->sampleLenght; a++)
+			newOne->sample[a] = toCopy->sample[a];
+	}
+	else
+		newOne->sample = NULL;
+
+	if (toCopy->vectorSample)
+	{
+		newOne->vectorSample = (Vector*) malloc(sizeof(Vector) *toCopy->sampleLenght);
+		for (unsigned a = 0; a < toCopy->sampleLenght; a++)
+			for (unsigned b = 0; b < VECTOR_SIZE; b++)
+			newOne->vectorSample[a][b] = toCopy->vectorSample[a][b];
+	}
+	else
+		newOne->vectorSample = NULL;
+
+}
+
+void destroyTestData(TestData* data)
+{
+	if (data->sample)
+		free(data->sample);
+	if (data->vectorSample)
+		free(data->vectorSample);
 }

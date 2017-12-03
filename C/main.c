@@ -5,17 +5,19 @@
 #include <pthread.h>
 #define ALPHA 0.05f
 #define ITERATIONS 1000
-#define SAMPLE_SIZE 100
-#define CUT_POINT 50
+#define SAMPLE_SIZE 30
+#define CUT_POINT 15
 #define PERMUTATIONS 1000
 #define THREAD_COUNT 4
 #include <random>
 
 std::default_random_engine engine;
 std::normal_distribution<float> dist1(0, 1);
-std::normal_distribution<float> dist2(2, 1);
+std::normal_distribution<float> dist2(1.5f, 1);
 std::normal_distribution<float> dist3(1, 1);
 std::normal_distribution<float> dist4(2, 2);
+std::chi_squared_distribution<float> chiDist(3.0);
+std::chi_squared_distribution<float> chiDist2(4.0);
 
 float randomFromGaussianMixture()
 {
@@ -36,10 +38,20 @@ float randomFromGaussianMixture2()
 void generateSample(TestData* data)
 {
 	for (int b = 0; b < CUT_POINT; b++)
-		data->sample[b] = randomFromGaussianMixture();
+		data->sample[b] = chiDist(engine);
 
 	for (unsigned b = CUT_POINT; b < data->sampleLenght; b++)
-		data->sample[b] = randomFromGaussianMixture();
+		data->sample[b] = chiDist2(engine);
+}
+
+void generateSampleVector(TestData* data)
+{
+	for (unsigned a = 0; a < data->cutPoint; a++)
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+			data->vectorSample[a][b] = dist2(engine);
+	for (unsigned a = data->cutPoint; a < data->sampleLenght; a++)
+		for (unsigned b = 0; b < VECTOR_SIZE; b++)
+			data->vectorSample[a][b] = dist3(engine);
 }
 
 typedef struct thd
@@ -58,10 +70,10 @@ void* threadedSuccessRateo(void* d)
 
 	for (unsigned a = th->startingIteration; a < th->endingIteration; a++)
 	{
-		generateSample(&data);
+		generateSampleVector(&data);
 		th->successes += runPermutationTest(&data);
 	}
-	free(data.sample);
+	destroyTestData(&data);
 	return NULL;
 }
 
@@ -99,7 +111,9 @@ int main()
 	data.iterationsCount = PERMUTATIONS;
 	data.cutPoint = CUT_POINT;
 	data.sampleLenght = SAMPLE_SIZE;
-	data.sample = (float*)malloc(sizeof(float)*data.sampleLenght);
+//	data.sample = (float*)malloc(sizeof(float)*data.sampleLenght);
+	data.sample = NULL;
+	data.vectorSample = (Vector*)malloc(sizeof(Vector)*data.sampleLenght);
 
 	for (int a = 50; a < PERMUTATIONS; a++)
 	{
@@ -108,6 +122,6 @@ int main()
 	}
 
 	//clean up
-    free (data.sample);
+	destroyTestData(&data);
 }
 
