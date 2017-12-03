@@ -24,7 +24,7 @@ function out = generateGraphic()
         
         figure('visible', 'off');
         s = scatter(a(1:2:size(a)), a(2:2:size(a)));
-        xlabel('iterations');
+        xlabel('permutations');
         ylabel('change detected rateo');
         name2 = strrep(name(t), '_', ' ');
         title(name2);
