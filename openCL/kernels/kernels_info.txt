@@ -1,0 +1,4 @@
+ttest 1 1
+# dsadsad
+mann-whitney 1 1
+vectorTTest 1 10
