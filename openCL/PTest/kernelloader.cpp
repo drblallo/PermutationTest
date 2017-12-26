@@ -13,7 +13,7 @@ void KernelLoader::initKernelLoader(const char* pathToFolder)
 		loader = new KernelLoader(pathToFolder);
 }
 
-KernelLoader::KernelLoader(const char* pathToFolder) : info()
+KernelLoader::KernelLoader(const char* pathToFolder) : info(), folder()
 {
 	ifstream file;	
 	string fileName(pathToFolder);
@@ -24,6 +24,7 @@ KernelLoader::KernelLoader(const char* pathToFolder) : info()
 	if (fileName[fileName.size()] != '/') 
 		fileName += '/'; //folders must end with a /
 
+	folder = fileName;
 	fileName += KERNEL_INFO_FILE; //create information file path
 
 	file.open(fileName); 
@@ -95,6 +96,30 @@ unsigned KernelLoader::getMinVectorSize(const char* name)
 			return info[a].getMinVectorSize();
 
 	return 0;
+}
+
+string KernelLoader::getProgram(const char* satistic, bool useCPM, unsigned vectorSize)
+{
+	assert(areCompatible(satistic, vectorSize) == true);
+	
+	std::string corePath;
+	if (!useCPM)
+		corePath = loader->folder + CORE_KERNEL_FILE;
+	else
+		corePath = loader->folder + CPM_KERNEL_FILE;
+
+	std::string statisticPath(loader->folder + satistic + ".cl");
+
+	std::ifstream coreFile(corePath);
+	std::ifstream sFile(statisticPath);
+
+	assert (coreFile.good() == true);
+	assert (sFile.good() == true);
+
+	string core((istreambuf_iterator<char>(coreFile)), (istreambuf_iterator<char>()));	
+	string stat((istreambuf_iterator<char>(sFile)), (istreambuf_iterator<char>()));
+
+	return core + stat;
 }
 
 unsigned KernelLoader::getMaxVectorSize(const char* name)

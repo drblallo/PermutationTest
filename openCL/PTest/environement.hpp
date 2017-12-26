@@ -9,27 +9,47 @@
 
 namespace pt
 {
+	typedef std::vector<int> DevicesList; 
+	typedef std::vector<DevicesList> ContextList;
+
+	typedef std::pair<cl::Device*, cl::CommandQueue*> DevQue;
+	class ContextDevQue
+	{
+		public:
+			ContextDevQue(cl::Context& con) : context(&con) {}
+			ContextDevQue(cl::Context& con, std::vector<DevQue>& dq) : 
+				context(&con),
+				devques(dq)
+			{}
+			cl::Context* context;
+			std::vector<DevQue> devques;
+	};
+
 	class Environement
 	{
 		public:
-			static bool initEnvironement(std::vector<int>& devicesIndex);
+			static bool initEnvironement(ContextList& devicesIndex);
 			static void clearEnvironement();
 
 			static const std::vector<cl::Platform>* getPlatforms();
-			static const std::vector<cl::CommandQueue>* getQueues();
-			static const std::vector<cl::Context>* getContextes();
-			static const std::vector<cl::Device>* getDevices();
+			static const std::vector<ContextDevQue>* getContextDevQue();
+
+			static unsigned getContextSize();
+			static unsigned getQueuesSize();
+			static bool initExecuted() {return environement != NULL;}
 
 		private:
-			Environement(bool &success, std::vector<int>& devincesIndex);
+			Environement(bool &success, ContextList& devincesIndex);
 			static Environement* environement;
 
 			bool discoverPlatforms();
-			bool discoverDevices(std::vector<int>& devicesIndex);
+			bool discoverDevices(ContextList& devicesIndex);
+			bool createContextes(ContextList& devicesIndex);
 
 			std::vector<cl::CommandQueue> queues;
 			std::vector<cl::Context> contextes;
 			std::vector<cl::Device> devices;
 			std::vector<cl::Platform> platforms;
+			std::vector<ContextDevQue> contexDevQueues;
 	};
 }

@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string>
 #include "environement.hpp"
+#include "ptestgpudata.hpp"
 
 namespace pt
 {
@@ -16,7 +17,7 @@ namespace pt
 	class PTest 
 	{
 		public:
-			PTest(unsigned vectorSize, unsigned valuesCount, bool trackLocationOfChange, const char* statistic);
+			PTest(unsigned vectorSize, unsigned valuesCount, bool trackLocationOfChange, const char* statistic, unsigned iterations);
 			~PTest();
 
 			/////////////////////////////////////////
@@ -84,15 +85,15 @@ namespace pt
 			unsigned changeLocation;
 			bool testExecuted;
 			bool useCPM;
+			unsigned iterations;
 			std::string statisticName;
 
 			/////////////////////////////////////////
 			//              gpu data               //
 			/////////////////////////////////////////
-			std::vector<cl::Buffer> buffers;
-			std::vector<cl::Program> programs;
-			std::vector<cl::Kernel> kernels; 
 
+			std::vector<PTestGPUData> gpuData;
+			void setUpGPUData();
 			void createProgram();
 			void loadData();
 	};

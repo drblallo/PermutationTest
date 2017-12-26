@@ -28,7 +28,7 @@ bool Environement::discoverPlatforms()
 	return true;
 }
 
-bool Environement::discoverDevices(std::vector<int>& devicesIndex)
+bool Environement::discoverDevices(ContextList& devicesIndex)
 {
 
 	std::vector<Device> dev;	
@@ -39,16 +39,22 @@ bool Environement::discoverDevices(std::vector<int>& devicesIndex)
 		
 		for (unsigned a = 0; a < dev.size(); a++)
 		{
-			if (std::find(devicesIndex.begin(), devicesIndex.end(), deviceCount) != devicesIndex.end())
-				devices.push_back(dev[a]);
+			devices.push_back(dev[a]);
 			if (devicesIndex.size() == 0)
-				std::cout << "device index: " << deviceCount << ": is " << dev[a].getInfo<CL_DEVICE_NAME>() << ", " << dev[a].getInfo<CL_DEVICE_OPENCL_C_VERSION>() << std::endl;
+				std::cout 
+					<< "device index: "
+					<< deviceCount << ": is " 
+					<< dev[a].getInfo<CL_DEVICE_NAME>() 
+					<< ", " 
+					<< dev[a].getInfo<CL_DEVICE_OPENCL_C_VERSION>() 
+					<< std::endl;
 		
-		deviceCount++;	
+			deviceCount++;	
+		}
 	}
-}
+	
 
-if (devices.size() > 0)
+	if (devices.size() > 0)
 		return true;
 
 	if (devicesIndex.size() > 0)
@@ -63,30 +69,35 @@ const vector<Platform>* Environement::getPlatforms()
 	return &environement->platforms;
 }
 
-const vector<CommandQueue>* Environement::getQueues()
+const vector<ContextDevQue>* Environement::getContextDevQue()
 {
 	assert(environement != NULL);
-	return &environement->queues;
+	return &environement->contexDevQueues;
 }
 
-const vector<Device>* Environement::getDevices()
+unsigned Environement::getContextSize()
 {
 	assert(environement != NULL);
-	return &environement->devices;
+	return environement->contexDevQueues.size();
 }
 
-const vector<Context>* Environement::getContextes()
+unsigned Environement::getQueuesSize()
 {
 	assert(environement != NULL);
-	return &environement->contextes;
+	unsigned quantity(0);
+	for (unsigned b = 0; b < environement->contexDevQueues.size(); b++)
+		quantity += environement->contexDevQueues[b].devques.size();
+
+	return quantity;
 }
 
-Environement::Environement(bool &success, std::vector<int>& devicesIndex) :
+Environement::Environement(bool &success, ContextList& devicesIndex) :
 	queues(0),
 	contextes(0),
 	devices(0),
 	platforms(0)
 {
+	cl_int error;
 	success = true;
 	if (!discoverPlatforms())
 	{
@@ -100,25 +111,83 @@ Environement::Environement(bool &success, std::vector<int>& devicesIndex) :
 		return;
 	}
 
-	cl_int error;
-	contextes.push_back(Context(devices, NULL, NULL, NULL, &error));
-	
-	clCheckError(error);
-	if (error != 0)
+	if (!createContextes(devicesIndex))
 	{
-		success = false;	
-		std::cout << "could not create context\n";
+		success = false;
 		return;
 	}
 
-	for (unsigned int a = 0; a < devices.size(); a++)
+	std::cout << "creating queues" << std::endl;
+
+	unsigned quantity(0);
+	for (unsigned b = 0; b < contexDevQueues.size(); b++)
+		quantity += contexDevQueues[b].devques.size();
+
+    queues.resize(quantity);
+	int t(0);
+	for (unsigned a = 0; a < contexDevQueues.size(); a++)
 	{
-		queues.push_back(CommandQueue(contextes[0], devices[a], 0, &error));
-		clCheckError(error);
+		std::cout << "for context number: " << a << std::endl;
+        auto cdq(&contexDevQueues[a]);
+        for (unsigned b = 0; b < cdq->devques.size(); b++)
+		{
+			std::cout 
+				<< "--for device: " 
+                << cdq->devques[b].first->getInfo<CL_DEVICE_NAME>()
+				<< std::endl;
+
+            queues[t] = CommandQueue(*cdq->context, *cdq->devques[b].first, 0, &error);
+            cdq->devques[b].second = &queues[t];
+			t++;
+			clCheckError(error);
+		}
 	}
 }
 
-bool Environement::initEnvironement(std::vector<int>& devicesIndex)
+bool Environement::createContextes(ContextList& devIndex)
+{
+
+		cl_int error;
+		bool foundOne(false);
+		for (unsigned a = 0; a < devIndex.size(); a++)
+		{
+			vector<cl::Device> lDev;
+			std::cout << "trying to create context populated by:" << std::endl;
+			for (unsigned b = 0; b < devIndex[a].size(); b++)
+			{
+				lDev.push_back(devices[devIndex[a][b]]);
+				std::cout 
+					<< "--device index: "
+					<< devIndex[a][b] << ": is " 
+					<< lDev.back().getInfo<CL_DEVICE_NAME>() 
+					<< ", " 
+					<< lDev.back().getInfo<CL_DEVICE_OPENCL_C_VERSION>() 
+					<< std::endl;
+			}
+
+			contextes.push_back(Context(lDev, NULL, NULL, NULL, &error));
+			clCheckError(error);
+			if (error == 0)
+			{
+				foundOne = true;
+				ContextDevQue cdq(contextes.back());
+				for (unsigned b = 0; b < devIndex[a].size(); b++)
+					cdq.devques.push_back({&devices[devIndex[a][b]], NULL});
+
+				contexDevQueues.push_back(cdq);
+			}
+		}
+
+		if (!foundOne)
+		{
+			std::cout << "could not create context" << std::endl;
+			return false;
+		}
+
+		return true;
+}
+
+bool Environement::initEnvironement(ContextList& devicesIndex)
 {
 	if (!environement)
 	{

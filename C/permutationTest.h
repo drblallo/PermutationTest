@@ -12,6 +12,7 @@ typedef struct td
 	unsigned cutPoint;
 	unsigned iterationsCount;
 	float alpha;		
+	float (*statistic)(const struct td*, const Permutation* permutation);
 } TestData;
 
 typedef struct prm Permutation;

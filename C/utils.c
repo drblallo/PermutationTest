@@ -2,6 +2,7 @@
 #include <time.h>
 #include "utils.h"
 #include <math.h>
+#include <random>
 
 int initRandom = 0;
 int randomNumber(int min, int max)
@@ -151,3 +152,60 @@ float Determinant(float**a,int n)
     return(det) ;
 }
 
+std::default_random_engine engine;
+std::uniform_real_distribution<float> uniform1(0, 1);
+std::uniform_real_distribution<float> uniform2(0.1f, 1.1f);
+
+std::normal_distribution<float> dist1(0, 1);
+std::normal_distribution<float> dist2(0.5f, 1);
+std::normal_distribution<float> dist3(1, 1);
+std::normal_distribution<float> dist4(2, 2);
+
+std::chi_squared_distribution<float> chiDist(3.0);
+std::chi_squared_distribution<float> chiDist2(4.0);
+
+float randomFromGaussianMixture1()
+{
+	if (randomFloat() < 0.5f)
+		return dist1(engine);
+	else
+		return dist2(engine);
+}
+
+float randomFromGaussianMixture2()
+{
+	if (randomFloat() < 0.5f)
+		return dist3(engine);
+	else
+		return dist4(engine);
+}
+
+float randomFromUniform()
+{
+	return uniform1(engine);
+}
+
+float randomFromUniform2()
+{
+	return uniform2(engine);
+}
+
+float randomFromChiSquared1()
+{
+	return chiDist(engine);
+}
+
+float randomFromChiSquared2()
+{
+	return chiDist2(engine);
+}
+
+float randomFromNormal()
+{
+	return dist1(engine);
+}
+
+float randomFromNormal2()
+{
+	return dist2(engine);
+}

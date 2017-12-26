@@ -1,11 +1,11 @@
 #include "ptest.hpp"
 #include "kernelloader.hpp"
-#include "CL/clext.h"
+#include <CL/clext.h>
 
 using namespace pt;
 
 
-PTest::PTest(unsigned vectorS, unsigned  valuesCount, bool trackLocationOfChange, const char* statistic) :
+PTest::PTest(unsigned vectorS, unsigned  valuesCount, bool trackLocationOfChange, const char* statistic, unsigned it) :
 	values(valuesCount),
 	mustCreateProgram(true),
 	mustLoadData(true),
@@ -14,12 +14,12 @@ PTest::PTest(unsigned vectorS, unsigned  valuesCount, bool trackLocationOfChange
 	changeLocation(0),
 	testExecuted(false),
 	useCPM(trackLocationOfChange),
+	iterations(it),
 	statisticName(statistic),
-	buffers(0),
-	programs(0),
-	kernels(0)
+	gpuData()
 {
 	assert(KernelLoader::areCompatible(statistic, vectorS) == true);
+	setUpGPUData();	
 }
 
 //when a test is copied from another one only cpu data are kept,
@@ -33,12 +33,11 @@ PTest::PTest(const PTest& other) :
 	changeLocation(0),
 	testExecuted(false),
 	useCPM(other.useCPM),
+	iterations(other.iterations),
 	statisticName(other.statisticName),
-	buffers(0),
-	programs(0),
-	kernels(0)
+	gpuData()
 {
-	
+	setUpGPUData();	
 }
 
 PTest& PTest::operator=(const PTest& other)
@@ -50,11 +49,21 @@ PTest& PTest::operator=(const PTest& other)
 	testExecuted = false;
 	useCPM = other.useCPM;
 	statisticName = other.statisticName;
-	kernels.clear();
-	buffers.clear();
+	iterations = other.iterations;
 	mustCreateProgram = true;
 	mustLoadData = true;
+	gpuData.clear();
+	setUpGPUData();	
 	return *this;
+}
+
+void PTest::setUpGPUData()
+{
+	assert(Environement::initExecuted() == true);
+	gpuData.clear();
+	for (unsigned a = 0; a < Environement::getContextSize(); a++)
+		gpuData.push_back(PTestGPUData(&Environement::getContextDevQue()->at(a)));
+
 }
 
 void PTest::runTest()
@@ -64,75 +73,48 @@ void PTest::runTest()
 	if (mustLoadData)
 		loadData();
 	
-	outValues.resize(values.size());
-	auto queues(Environement::getQueues());
-	for (unsigned a = 0; a < queues->size(); a++)
-	{
-		unsigned workSize(values.size() / queues->size());
-		cl_int error = queues->at(a).enqueueNDRangeKernel(
-				kernels[a],
-			   	cl::NDRange(workSize * a),
-			   	cl::NDRange((workSize * (a + 1)) - (workSize * a)),
-			   	cl::NullRange);	
+	outValues.resize(iterations);
+	unsigned qSize(Environement::getQueuesSize());
+	unsigned workSize(iterations / qSize);
 
-		clCheckError(error);
+	unsigned offset(0);
+	for (unsigned a = 0; a < gpuData.size(); a++)
+	{
+		gpuData[a].run(&outValues[offset * workSize]);	
+		offset += gpuData[a].deviceCount(); 
 	}
 
-	for (unsigned a = 0; a < queues->size(); a++)
-	{
-		queues->at(a).finish();
-	}
+	for (unsigned a = 0; a < gpuData.size(); a++)
+		gpuData[a].waitForEnd();
 
-	queues->at(0).enqueueReadBuffer(buffers[1], CL_TRUE, 0, sizeof(float) * values.size(), &outValues[0]);
+	changeLocation = outValues[0];
+    testExecuted = true;
 }
 
 void PTest::createProgram()
 {
-	assert(programs.size() == 0);
-	assert(buffers.size() == 0);
-
 	cl::Program::Sources source;
-	std::string s(KernelLoader::getProgramm(statisticName.c_str(), useCPM, vectorSize));
-	source.push_back(s.c_str(), s.size());
+	std::string s(KernelLoader::getProgram(statisticName.c_str(), useCPM, vectorSize));
+	source.push_back({s.c_str(), s.size()});
 
-	for (unsigned a = 0; a < Environement::getContextes()->size(); a++)
-	{
-		programs.push_back(cl::Program(Environement::getContextes()->at(a), source));
-		int err = programs[a].build(*Environement::getDevices());
-		clCheckError(err);
-	}
+	for (unsigned a = 0; a < gpuData.size(); a++)
+		gpuData[a].createProgram(source);
 
-	for (unsigned a = 0; a < Environement::getQueues()->size(); a++)
-		kernels.push_back(cl::Kernel(programs[0], "p_test"));	
-	
 	mustCreateProgram = false;	
 }
 
 void PTest::loadData()
 {
-	buffers.clear();
-	buffers.push_back(cl::Buffer(Environement::getContextes()->at(0), CL_MEM_READ_WRITE, sizeof(float) * values.size()));
-	buffers.push_back(cl::Buffer(Environement::getContextes()->at(0), CL_MEM_READ_WRITE, sizeof(float) * values.size()));
+	unsigned qSize(Environement::getQueuesSize());
+	unsigned workSize(iterations / qSize);
 
-	Environement::getQueues()->at(0).enqueueWriteBuffer(
-			buffers[0],
-			CL_TRUE,
-			0,
-			sizeof(float) * values.size(),
-			&values.at(0));
-
-	for (unsigned a = 0; a < kernels.size(); a++)
-	{
-		kernels[a].setArg(0, buffers[0]);
-		kernels[a].setArg(0, buffers[1]);
-	}
+	for (unsigned a = 0; a < gpuData.size(); a++)
+		gpuData[a].loadData(values.size(), &values[0], workSize);
 
 	mustLoadData = false;
 }
 
 PTest::~PTest()
 {
-	kernels.clear();
-	programs.clear();
-	buffers.clear();
+	gpuData.clear();
 }

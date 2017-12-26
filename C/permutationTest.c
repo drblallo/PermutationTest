@@ -16,7 +16,7 @@ int compare(const void * a, const void * b)
 
 float evaluateStatistic(const TestData* data, const Permutation* permutation)
 {
-	float v = hotelintTest(data, permutation);
+	float v = data->statistic(data, permutation);
 	return v;
 }
 
@@ -298,6 +298,7 @@ void testDataClone(TestData* newOne, const TestData* toCopy)
 	newOne->sampleLenght = toCopy->sampleLenght;
 	newOne->cutPoint = toCopy->cutPoint;
 	newOne->iterationsCount = toCopy->iterationsCount;
+	newOne->statistic = toCopy->statistic;
 	if (toCopy->sample)
 	{
 		newOne->sample = (float*) malloc(sizeof(float) * toCopy->sampleLenght);
