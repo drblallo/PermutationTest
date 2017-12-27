@@ -1,6 +1,7 @@
 #include "kernelloader.hpp"
 #include <assert.h>
 #include <fstream>
+#include <algorithm>
 
 using namespace pt;
 using namespace std;
@@ -98,7 +99,23 @@ unsigned KernelLoader::getMinVectorSize(const char* name)
 	return 0;
 }
 
-string KernelLoader::getProgram(const char* satistic, bool useCPM, unsigned vectorSize)
+void ReplaceAll(std::string& str, const std::string& from, const std::string& to) {
+	size_t start_pos = 0;
+	while((start_pos = str.find(from, start_pos)) != std::string::npos) 
+	{
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+	}
+}
+
+string KernelLoader::getProgram
+	(
+		const char* satistic, 
+		bool useCPM, 
+		unsigned vectorSize,
+		unsigned sampleSize,
+		unsigned prime
+	)
 {
 	assert(areCompatible(satistic, vectorSize) == true);
 	
@@ -119,7 +136,13 @@ string KernelLoader::getProgram(const char* satistic, bool useCPM, unsigned vect
 	string core((istreambuf_iterator<char>(coreFile)), (istreambuf_iterator<char>()));	
 	string stat((istreambuf_iterator<char>(sFile)), (istreambuf_iterator<char>()));
 
-	return core + stat;
+	core += stat;
+	
+	std::string overBuondSize("OVER_BOUND_SIZE");
+	std::string valString = std::to_string(prime - sampleSize);
+	ReplaceAll(core, overBuondSize, valString);
+
+	return core;
 }
 
 unsigned KernelLoader::getMaxVectorSize(const char* name)
@@ -132,4 +155,36 @@ unsigned KernelLoader::getMaxVectorSize(const char* name)
 			return info[a].getMaxVectorSize();
 
 	return 0;
+}
+
+bool IsPrime(int number)
+{
+
+	if (number == 2 || number == 3)
+		return true;
+
+	if (number % 2 == 0 || number % 3 == 0)
+		return false;
+
+	int divisor = 6;
+	while (divisor * divisor - 2 * divisor + 1 <= number)
+	{
+		if (number % (divisor - 1) == 0)
+			return false;
+
+		if (number % (divisor + 1) == 0)
+			return false;
+
+		divisor += 6;
+
+	}
+
+	return true;
+}
+
+unsigned KernelLoader::getNearestPrime(unsigned val)
+{
+	while (!((val % 4) == 3) ||!IsPrime(val) )
+		val++;
+	return val;
 }

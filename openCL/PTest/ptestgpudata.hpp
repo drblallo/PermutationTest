@@ -10,7 +10,14 @@ namespace pt
 			PTestGPUData(const pt::ContextDevQue* c);
 
 			void createProgram(cl::Program::Sources& s);
-			void loadData(unsigned inDataSize, float* firstValue, unsigned devicePermutations);
+			void loadData(
+					unsigned inDataSize,
+				   	float* firstValue,
+				   	unsigned devicePermutations,
+					unsigned prime,
+					unsigned vectorSize,
+					unsigned cutPoint
+					);
 			void run(float* writeBackLocation);
 			void waitForEnd();
 

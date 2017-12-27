@@ -17,7 +17,14 @@ namespace pt
 	class PTest 
 	{
 		public:
-			PTest(unsigned vectorSize, unsigned valuesCount, bool trackLocationOfChange, const char* statistic, unsigned iterations);
+			PTest(
+					unsigned vectorSize, 
+					unsigned valuesCount, 
+					bool trackLocationOfChange, 
+					const char* statistic, 
+					unsigned iterations,
+					float alpha
+				);
 			~PTest();
 
 			/////////////////////////////////////////
@@ -34,15 +41,9 @@ namespace pt
 			{
 				unsigned index((pos * vectorSize) + inVectorLocation);
 				assert (inVectorLocation < vectorSize);
-				if (index >= values.size())
-					values.resize(index + 1);
+				assert (index < values.size());
 				values[index] = value;
 				mustLoadData = true;
-			}
-
-			inline void resizeData(unsigned newSize)
-			{
-				values.resize((newSize * vectorSize) + 1);
 			}
 
 			inline float getValue(unsigned inVectorLocation, unsigned pos) const
@@ -63,6 +64,17 @@ namespace pt
 			{
 				assert(testExecuted == true);
 				return changeLocation;
+			}
+
+			inline unsigned getCutPoint() const
+			{
+				return cutPoint;
+			}	
+
+			inline void setCutPoint(unsigned cutP)
+			{
+				assert (cutP < values.size() == true);
+				cutPoint = cutP;
 			}
 
 			inline bool isTestCompleated() const 
@@ -86,6 +98,9 @@ namespace pt
 			bool testExecuted;
 			bool useCPM;
 			unsigned iterations;
+			unsigned cutPoint;
+			unsigned prime;
+			float alpha;
 			std::string statisticName;
 
 			/////////////////////////////////////////
@@ -96,5 +111,6 @@ namespace pt
 			void setUpGPUData();
 			void createProgram();
 			void loadData();
+			void finilizeTest();
 	};
 }

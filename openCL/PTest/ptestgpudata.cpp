@@ -1,6 +1,7 @@
 #include "ptestgpudata.hpp"
 #include <assert.h>
 #include "CL/clext.h"
+#include <iostream>
 
 using namespace pt;
 using namespace cl;
@@ -21,12 +22,24 @@ void PTestGPUData::createProgram(Program::Sources& s)
 
 	int err = program.build(dvs);
 	clCheckError(err);
+	if (err)
+		std::cout 
+			<< program.getBuildInfo<CL_PROGRAM_BUILD_LOG>()[0].second
+			<< std::endl;
 
 	kernel = Kernel(program, "p_test", &err);
 	clCheckError(err);
 }
 
-void PTestGPUData::loadData(unsigned inDataSize, float* firstValue, unsigned devicePermutations)
+void PTestGPUData::loadData
+(
+		unsigned inDataSize,
+	   	float* firstValue,
+	   	unsigned devicePermutations,
+		unsigned prime,
+		unsigned vectorSize,
+		unsigned cutPoint 
+)
 {
 	devicePerm = devicePermutations;
 	writeMem.clear();
@@ -36,7 +49,7 @@ void PTestGPUData::loadData(unsigned inDataSize, float* firstValue, unsigned dev
 	inBuffer = Buffer(
 			*cdq->context,
 		   	CL_MEM_READ_WRITE, 
-			sizeof(float) * inDataSize,
+			sizeof(float) * prime,
 			NULL,
 			&err
 			);	
@@ -68,7 +81,16 @@ void PTestGPUData::loadData(unsigned inDataSize, float* firstValue, unsigned dev
 	clCheckError(err);
 	err = kernel.setArg(1, outBuffer);
 	clCheckError(err);
-
+	err = kernel.setArg(2, sizeof(unsigned), &prime);
+	clCheckError(err);
+	err = kernel.setArg(3, sizeof(unsigned), &vectorSize);
+	clCheckError(err);
+	err = kernel.setArg(4, sizeof(unsigned), &cutPoint);
+	clCheckError(err);
+	
+	unsigned dataSize = inDataSize / vectorSize;
+	err = kernel.setArg(5, sizeof(unsigned), &dataSize);
+	clCheckError(err);
 }
 
 void PTestGPUData::run(float* writeBackLocation)

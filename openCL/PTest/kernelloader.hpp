@@ -16,7 +16,15 @@ namespace pt
 			static void getPossibleStatistics(unsigned vecSize, std::vector<std::string>& v);
 			static unsigned getMinVectorSize(const char* name);
 			static unsigned getMaxVectorSize(const char* name);
-			static std::string getProgram(const char* statistic, bool useCPM, unsigned vecSize);
+			static std::string getProgram
+				(
+					const char* statistic, 
+					bool useCPM, 
+					unsigned vecSize,
+					unsigned sampleSize,
+					unsigned prime
+				);
+			static unsigned getNearestPrime(unsigned val);
 
 		private:
 			static KernelLoader* loader;
