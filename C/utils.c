@@ -158,8 +158,8 @@ std::uniform_real_distribution<float> uniform2(0.1f, 1.1f);
 
 std::normal_distribution<float> dist1(0, 1);
 std::normal_distribution<float> dist2(0.5f, 1);
-std::normal_distribution<float> dist3(1, 1);
-std::normal_distribution<float> dist4(2, 2);
+std::normal_distribution<float> dist3(0.2f, 1);
+std::normal_distribution<float> dist4(0.7f, 2);
 
 std::chi_squared_distribution<float> chiDist(3.0);
 std::chi_squared_distribution<float> chiDist2(4.0);

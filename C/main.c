@@ -131,7 +131,7 @@ int main()
 	fclose(f);
 
 	printf("uniform disequal\n");
-	f = fopen("uniform_0,3.txt", "w+");
+	f = fopen("uniform_0,1.txt", "w+");
 	runTests(&data, randomFromUniform, randomFromUniform2, f);
 	fclose(f);
 
