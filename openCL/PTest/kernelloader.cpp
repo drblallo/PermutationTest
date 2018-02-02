@@ -126,23 +126,27 @@ string KernelLoader::getProgram
 		corePath = loader->folder + CPM_KERNEL_FILE;
 
 	std::string statisticPath(loader->folder + satistic + ".cl");
+	std::string utilsPath(loader->folder + UTILS_FILE);
 
 	std::ifstream coreFile(corePath);
 	std::ifstream sFile(statisticPath);
+	std::ifstream utilsFile(utilsPath);
 
 	assert (coreFile.good() == true);
 	assert (sFile.good() == true);
+	assert (utilsFile.good() == true);
 
 	string core((istreambuf_iterator<char>(coreFile)), (istreambuf_iterator<char>()));	
 	string stat((istreambuf_iterator<char>(sFile)), (istreambuf_iterator<char>()));
+	string utils((istreambuf_iterator<char>(utilsFile)), (istreambuf_iterator<char>()));
 
-	core += stat;
+	utils += stat + core;
 	
 	std::string overBuondSize("OVER_BOUND_SIZE");
 	std::string valString = std::to_string(prime - sampleSize);
-	ReplaceAll(core, overBuondSize, valString);
+	ReplaceAll(utils, overBuondSize, valString);
 
-	return core;
+	return utils;
 }
 
 unsigned KernelLoader::getMaxVectorSize(const char* name)

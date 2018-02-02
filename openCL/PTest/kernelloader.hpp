@@ -2,6 +2,7 @@
 #define KERNEL_INFO_FILE "kernels_info.txt"
 #define CORE_KERNEL_FILE "core_kernel.cl"
 #define CPM_KERNEL_FILE "cpm_kernel.cl"
+#define UTILS_FILE "utils.cl"
 #include "kernelinfo.hpp"
 #include <vector>
 

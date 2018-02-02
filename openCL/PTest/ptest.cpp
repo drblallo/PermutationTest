@@ -171,16 +171,27 @@ void PTest::createProgram()
 	mustCreateProgram = false;	
 }
 
+std::vector<float>& PTest::getVectorToLoad()
+{
+	return values;
+}
+
+void PTest::preProcess()
+{
+
+}
+
 void PTest::loadData()
 {
 	unsigned qSize(Environement::getQueuesSize());
 	unsigned workSize(iterations / qSize);
 
+	preProcess();
 	for (unsigned a = 0; a < gpuData.size(); a++)
 		gpuData[a].loadData
 			(
-				values.size(),
-			   	&values[0],
+				getVectorToLoad().size(),
+			   	&getVectorToLoad()[0],
 			   	workSize,
 				prime,
 			   	vectorSize,

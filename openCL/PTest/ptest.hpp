@@ -25,14 +25,13 @@ namespace pt
 					unsigned iterations,
 					float alpha
 				);
-			~PTest();
+			virtual ~PTest();
 
 			/////////////////////////////////////////
 			//Copy assignament and copy constructor//
 			/////////////////////////////////////////
 			PTest(const PTest& other);
 			PTest& operator=(const PTest& other);
-			
 			
 			/////////////////////////////////////////
 			//           setter and getter         //
@@ -84,7 +83,7 @@ namespace pt
 
 			void runTest();
 
-		private:
+		protected:
 			/////////////////////////////////////////
 			//              cpu data               //
 			/////////////////////////////////////////
@@ -103,11 +102,15 @@ namespace pt
 			float alpha;
 			std::string statisticName;
 
+			virtual std::vector<float>& getVectorToLoad();
+			virtual void preProcess();
+
+		private:
 			/////////////////////////////////////////
 			//              gpu data               //
 			/////////////////////////////////////////
-
 			std::vector<PTestGPUData> gpuData;
+
 			void setUpGPUData();
 			void createProgram();
 			void loadData();

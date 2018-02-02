@@ -3,6 +3,7 @@
 #include "PTest/environement.hpp"
 #include <iostream>
 #include <random>
+#include "PTest/rankptest.hpp"
 
 int main()
 {
@@ -21,7 +22,7 @@ int main()
 	auto info(pt::KernelLoader::getInfo());
 	for (int b = 0; b < 1000; b++)
 	{
-		pt::PTest loader(1, 1000, false, "ttest", 1000, 0.05f);
+		pt::RankPTest loader(1000, false, "mann-whitney" /*"ttest"*/, 1000, 0.05f);
 		loader.setCutPoint(500);
 		for (int a = 0; a < 500; a++)
 			loader.setValue(0, a, dist(eng));
