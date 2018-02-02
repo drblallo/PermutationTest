@@ -9,10 +9,10 @@ namespace pt
 		public:
 			RankPTest(
 					unsigned valuesCount, 
-					bool trackLocationOfChange, 
 					const char* statistic, 
 					unsigned iterations,
-					float alpha
+					float alpha, 
+					bool trackLocationOfChange = false 
 				);
 			virtual ~RankPTest();	
 

@@ -146,6 +146,10 @@ string KernelLoader::getProgram
 	std::string valString = std::to_string(prime - sampleSize);
 	ReplaceAll(utils, overBuondSize, valString);
 
+	std::string cpmStartPoint("CPM_START_POINT");
+	valString = std::to_string(20);
+	ReplaceAll(utils, cpmStartPoint, valString);
+
 	return utils;
 }
 

@@ -9,9 +9,10 @@ float evaluateStatistic
 	const unsigned int cutPoint,
 	const unsigned int vectorSize
 )
-{
-	unsigned int count = 0;
+{	
 	float stat = 0;
+	unsigned int count = 0;
+
 	
 	float firstPartAccumulation = 0;
 	float secondPartAccumulation = 0;
@@ -45,10 +46,6 @@ float evaluateStatistic
 
 		count = count + 1;
 	}
-
-//	stat = firstPartAccumulation / (cutPoint);
-//	stat -= secondPartAccumulation / (sampleSize - cutPoint);
-//	return stat;
 		
 	while (count < prime)
 	{
@@ -70,7 +67,68 @@ float evaluateStatistic
 		overBoundReadIndex = overBoundReadIndex + 1;
 		count = count + 1;
 	}
-	stat = firstPartAccumulation / (cutPoint);
-	stat -= secondPartAccumulation / (sampleSize - cutPoint);
-	return stat;
+
+	float mean1 = firstPartAccumulation / (cutPoint);
+	float mean2 = secondPartAccumulation / (sampleSize - cutPoint);
+
+	stat = mean1 - mean2;	
+	
+	//deviation
+	count = 0;
+	firstPartAccumulation = 0;
+	secondPartAccumulation = 0;
+	
+	overBoundWriteIndex = 0;
+	overBoundReadIndex = 0;
+	for (int a = 0; a < OVER_BOUND_SIZE; a++)
+		overBounds[a] = 0;
+
+	while (count < sampleSize)
+	{
+		float currentValue = a[count];		
+		
+		unsigned int actualPosition = next(&seed, offset, prime);	
+		actualPosition = (1-isFirstItem) * (actualPosition);
+		actualPosition += (isFirstItem) * count;
+			
+		int isAfterEdge = (int)(actualPosition >= sampleSize);
+		overBounds[overBoundWriteIndex] += currentValue * isAfterEdge;
+		overBoundWriteIndex += isAfterEdge;
+
+		int mustBeAddToFirstGroup = (int)(actualPosition < cutPoint);
+		int mustBeAddToSecondGroup = (int)(actualPosition >= cutPoint && !isAfterEdge); 
+
+		firstPartAccumulation += mustBeAddToFirstGroup * currentValue;
+		secondPartAccumulation += mustBeAddToSecondGroup * currentValue;
+
+		count = count + 1;
+	}
+		
+	while (count < prime)
+	{
+		float currentValue = overBounds[overBoundReadIndex];		
+		
+		unsigned int actualPosition = next(&seed, offset, prime);
+
+		int isAfterEdge = (int)(actualPosition >= sampleSize);
+		overBounds[overBoundWriteIndex] += currentValue * isAfterEdge;
+		overBoundWriteIndex += isAfterEdge;
+
+
+		int mustBeAddToFirstGroup = (int)(actualPosition < cutPoint);
+		int mustBeAddToSecondGroup = (int)(actualPosition >= cutPoint && !isAfterEdge); 
+
+		firstPartAccumulation += mustBeAddToFirstGroup * ((currentValue - mean1) * (currentValue - mean1));
+		secondPartAccumulation += mustBeAddToSecondGroup * ((currentValue - mean2) * (currentValue - mean2));
+
+		overBoundReadIndex = overBoundReadIndex + 1;
+		count = count + 1;
+	}
+
+	float variance1 = firstPartAccumulation / (cutPoint - 1);
+	float variance2 = secondPartAccumulation / (sampleSize - cutPoint - 1);
+	
+	stat /= sqrt((variance1 * cutPoint) + (variance2 * (sampleSize - cutPoint)));	
+
+	return fabs(stat);
 }

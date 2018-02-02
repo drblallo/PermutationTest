@@ -38,7 +38,7 @@ void PTestGPUData::loadData
 	   	unsigned devicePermutations,
 		unsigned prime,
 		unsigned vectorSize,
-		unsigned cutPoint 
+		unsigned cutPoint
 )
 {
 	devicePerm = devicePermutations;
@@ -57,6 +57,15 @@ void PTestGPUData::loadData
 	clCheckError(err);
 
 	outBuffer = Buffer(
+				*cdq->context,
+				CL_MEM_READ_WRITE,
+				sizeof(float) * devicePermutations * cdq->devques.size(),
+				NULL,
+				&err
+				);
+	clCheckError(err);
+
+	extraOutBuffer = Buffer(
 				*cdq->context,
 				CL_MEM_READ_WRITE,
 				sizeof(float) * devicePermutations * cdq->devques.size(),
@@ -91,14 +100,18 @@ void PTestGPUData::loadData
 	unsigned dataSize = inDataSize / vectorSize;
 	err = kernel.setArg(5, sizeof(unsigned), &dataSize);
 	clCheckError(err);
+
+	err = kernel.setArg(6, extraOutBuffer);
+	clCheckError(err);
 }
 
-void PTestGPUData::run(float* writeBackLocation)
+void PTestGPUData::run(float* writeBackLocation, float* extraWriteBackLocation)
 {
 	execEvent.clear();
 	readEvent.clear();
 	int err;
 
+	readEvent.push_back(Event());
 	readEvent.push_back(Event());
 	for (unsigned a = 0; a < cdq->devques.size(); a++)
 		execEvent.push_back(Event());	
@@ -128,11 +141,26 @@ void PTestGPUData::run(float* writeBackLocation)
 			&execEvent,
 			&readEvent[0]
 		);	
+	clCheckError(err);
+
+	err = cdq->devques[0].second->enqueueReadBuffer
+		(
+			extraOutBuffer,
+			CL_FALSE,
+			0,
+			sizeof(float) * devicePerm * cdq->devques.size(),
+			extraWriteBackLocation,
+			&execEvent,
+			&readEvent[1]
+		);	
+	clCheckError(err);
 }
 
 void PTestGPUData::waitForEnd()
 {
 	assert(readEvent.size() >= 0);
 	
+//	assert(readEvent.size() != 2);
 	readEvent[0].wait();
+	readEvent[1].wait();
 }

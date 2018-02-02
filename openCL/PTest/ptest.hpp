@@ -20,10 +20,10 @@ namespace pt
 			PTest(
 					unsigned vectorSize, 
 					unsigned valuesCount, 
-					bool trackLocationOfChange, 
 					const char* statistic, 
 					unsigned iterations,
-					float alpha
+					float alpha,
+					bool trackLocationOfChange = false
 				);
 			virtual ~PTest();
 
@@ -89,6 +89,7 @@ namespace pt
 			/////////////////////////////////////////
 			std::vector<float> values;
 			std::vector<float> outValues;
+			std::vector<float> extraOutValues;
 			bool mustCreateProgram;
 			bool mustLoadData;
 			unsigned vectorSize;

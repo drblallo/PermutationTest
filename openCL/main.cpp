@@ -17,17 +17,18 @@ int main()
 
 	std::default_random_engine eng(time(0));
 	std::uniform_real_distribution<float> dist(0, 1);
-	std::uniform_real_distribution<float> dist2(0, 1);
+	std::uniform_real_distribution<float> dist2(3, 1);
 	
 	auto info(pt::KernelLoader::getInfo());
-	for (int b = 0; b < 1000; b++)
+	for (int b = 0; b < 1; b++)
 	{
-		pt::RankPTest loader(1000, false, "mann-whitney" /*"ttest"*/, 1000, 0.05f);
+		//pt::RankPTest loader(1000, "mann-whitney" /*"ttest"*/, 1000, 0.05f);
+		pt::PTest loader(1, 1000, "ttest", 1000, 0.05f, true);
 		loader.setCutPoint(500);
 		for (int a = 0; a < 500; a++)
 			loader.setValue(0, a, dist(eng));
 		for (int a = 500; a < 1000; a++)
-			loader.setValue(0, a, dist(eng));
+			loader.setValue(0, a, dist2(eng));
 		loader.runTest();
 
 		changes += loader.isThereAChange();

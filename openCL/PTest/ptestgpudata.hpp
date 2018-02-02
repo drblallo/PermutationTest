@@ -18,7 +18,7 @@ namespace pt
 					unsigned vectorSize,
 					unsigned cutPoint
 					);
-			void run(float* writeBackLocation);
+			void run(float* writeBackLocation, float* extraWriteBackLocation);
 			void waitForEnd();
 
 			inline unsigned deviceCount() const {return cdq->devques.size();}
@@ -27,6 +27,7 @@ namespace pt
 			const pt::ContextDevQue* cdq;
 			cl::Buffer inBuffer;
 			cl::Buffer outBuffer;
+			cl::Buffer extraOutBuffer;
 			cl::Program program;
 			cl::Kernel kernel; 
 			std::vector<cl::Event> writeMem;

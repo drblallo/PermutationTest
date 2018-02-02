@@ -11,10 +11,10 @@ PTest::PTest
 		(
 		unsigned vectorS,
 	   	unsigned  valuesCount,
-	   	bool trackLocationOfChange,
 	   	const char* statistic,
 	   	unsigned it,
-		float significativityLevel
+		float significativityLevel,
+	   	bool trackLocationOfChange 
 		) :
 	values(valuesCount),
 	mustCreateProgram(true),
@@ -132,20 +132,25 @@ void PTest::runTest()
 		loadData();
 	
 	outValues.resize(iterations);
+	extraOutValues.resize(iterations);
 	unsigned qSize(Environement::getQueuesSize());
 	unsigned workSize(iterations / qSize);
 
 	unsigned offset(0);
 	for (unsigned a = 0; a < gpuData.size(); a++)
 	{
-		gpuData[a].run(&outValues[offset * workSize]);	
+		gpuData[a].run(&outValues[offset * workSize], &extraOutValues[offset * workSize]);
 		offset += gpuData[a].deviceCount(); 
 	}
 
 	for (unsigned a = 0; a < gpuData.size(); a++)
 		gpuData[a].waitForEnd();
 
+	//assert(false);
 	finilizeTest();
+	if (useCPM && changeFound)
+		changeLocation = extraOutValues[0];
+
     testExecuted = true;
 }
 

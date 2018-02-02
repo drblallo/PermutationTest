@@ -5,19 +5,19 @@ using namespace pt;
 RankPTest::RankPTest
 		(
 	   	unsigned  valuesCount,
-	   	bool trackLocationOfChange,
 	   	const char* statistic,
 	   	unsigned it,
-		float significativityLevel
+		float significativityLevel,
+	   	bool trackLocationOfChange
 		) 
 		:	PTest
 			(
 				1, 
 				valuesCount, 
-				trackLocationOfChange, 
 				statistic, 
 				it, 
-				significativityLevel
+				significativityLevel,
+				trackLocationOfChange
 			),
 		   	postProcessValues() {}
 

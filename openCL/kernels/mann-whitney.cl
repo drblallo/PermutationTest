@@ -71,14 +71,12 @@ float evaluateStatistic
 	int l1 = sampleSize - cutPoint;
 	firstPartAccumulation -= ((l0 * (1 + l0))/2);
 	secondPartAccumulation -= ((l1* (1 + l1))/2);
-	//secondPartAccumulation -= ((l1 * (1+l1))/2);
-	//return min(firstPartAccumulation, secondPartAccumulation);
 	firstPartAccumulation = min(firstPartAccumulation, secondPartAccumulation);	
 	
-	float mu = l0 * l1 / 2;
-	float sd = sqrt((l0 * l1 * (l1+l0+1)) / 12.0f);
-	firstPartAccumulation = (firstPartAccumulation-mu)/sd;
+	//float mu = l0 * l1 / 2;
+	//float sd = sqrt((l0 * l1 * (l1+l0+1)) / 12.0f);
+	//firstPartAccumulation = (firstPartAccumulation-mu)/sd;
 
-	//printf("%f\n", u1);
+	
 	return fabs(firstPartAccumulation);
 }
