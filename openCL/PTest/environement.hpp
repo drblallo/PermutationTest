@@ -12,7 +12,23 @@ namespace pt
 	typedef std::vector<int> DevicesList; 
 	typedef std::vector<DevicesList> ContextList;
 
-	typedef std::pair<cl::Device*, cl::CommandQueue*> DevQue;
+	//each device has a queue related to him, this is used to keep track of them
+	class  DevQue
+	{
+		public:
+			DevQue(cl::Device* d, cl::CommandQueue* q) : device(d),  commandQueue(q) {}
+			cl::Device* getDevice() const {return device;}
+			cl::CommandQueue* getQueue() const {return commandQueue;}
+			void setQueue(cl::CommandQueue* q) {commandQueue = q;} 
+
+		private:
+			cl::Device* device;
+			cl::CommandQueue* commandQueue;
+
+	};
+
+	//a collecetion of devices can be part of a context, this is used to keep
+	//treack of them
 	class ContextDevQue
 	{
 		public:
@@ -21,10 +37,19 @@ namespace pt
 				context(&con),
 				devques(dq)
 			{}
+			cl::Context* getContex() const {return context;}
+			const DevQue* getDevQueue(unsigned index) const {return &devques[index];}
+			DevQue* getDevQueue(unsigned index){return &devques[index];}
+			unsigned getDevQueueSize() const {return devques.size();}
+			void addDevQueue(DevQue d) {devques.push_back(d);}
+
+		private:
 			cl::Context* context;
 			std::vector<DevQue> devques;
 	};
 
+	//a enviroment is a singleton object that keeps track of
+	//every context queue and device.
 	class Environement
 	{
 		public:

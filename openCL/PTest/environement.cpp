@@ -86,7 +86,7 @@ unsigned Environement::getQueuesSize()
 	assert(environement != NULL);
 	unsigned quantity(0);
 	for (unsigned b = 0; b < environement->contexDevQueues.size(); b++)
-		quantity += environement->contexDevQueues[b].devques.size();
+		quantity += environement->contexDevQueues[b].getDevQueueSize();
 
 	return quantity;
 }
@@ -121,7 +121,7 @@ Environement::Environement(bool &success, ContextList& devicesIndex) :
 
 	unsigned quantity(0);
 	for (unsigned b = 0; b < contexDevQueues.size(); b++)
-		quantity += contexDevQueues[b].devques.size();
+		quantity += contexDevQueues[b].getDevQueueSize();
 
     queues.resize(quantity);
 	int t(0);
@@ -129,15 +129,15 @@ Environement::Environement(bool &success, ContextList& devicesIndex) :
 	{
 		std::cout << "for context number: " << a << std::endl;
         auto cdq(&contexDevQueues[a]);
-        for (unsigned b = 0; b < cdq->devques.size(); b++)
+        for (unsigned b = 0; b < cdq->getDevQueueSize(); b++)
 		{
 			std::cout 
 				<< "--for device: " 
-                << cdq->devques[b].first->getInfo<CL_DEVICE_NAME>()
+                << cdq->getDevQueue(b)->getDevice()->getInfo<CL_DEVICE_NAME>()
 				<< std::endl;
 
-            queues[t] = CommandQueue(*cdq->context, *cdq->devques[b].first, 0, &error);
-            cdq->devques[b].second = &queues[t];
+            queues[t] = CommandQueue(*cdq->getContex(), *cdq->getDevQueue(b)->getDevice(), 0, &error);
+            cdq->getDevQueue(b)->setQueue(&queues[t]);
 			t++;
 			clCheckError(error);
 		}
@@ -172,7 +172,7 @@ bool Environement::createContextes(ContextList& devIndex)
 				foundOne = true;
 				ContextDevQue cdq(contextes.back());
 				for (unsigned b = 0; b < devIndex[a].size(); b++)
-					cdq.devques.push_back({&devices[devIndex[a][b]], NULL});
+					cdq.addDevQueue(DevQue(&devices[devIndex[a][b]], NULL));
 
 				contexDevQueues.push_back(cdq);
 			}

@@ -14,11 +14,11 @@ PTestGPUData::PTestGPUData(const ContextDevQue* c) : cdq(c)
 
 void PTestGPUData::createProgram(Program::Sources& s)
 {
-	program = Program(*cdq->context, s);	
+	program = Program(*cdq->getContex(), s);	
 
 	std::vector<Device> dvs;
-	for (unsigned a = 0; a < cdq->devques.size(); a++)
-		dvs.push_back(*cdq->devques[a].first);
+	for (unsigned a = 0; a < cdq->getDevQueueSize(); a++)
+		dvs.push_back(*cdq->getDevQueue(a)->getDevice());
 
 	int err = program.build(dvs);
 	clCheckError(err);
@@ -47,9 +47,9 @@ void PTestGPUData::loadData
 
 	int err;
 	inBuffer = Buffer(
-			*cdq->context,
+			*cdq->getContex(),
 		   	CL_MEM_READ_WRITE, 
-			sizeof(float) * prime,
+			sizeof(float) * prime * vectorSize,
 			NULL,
 			&err
 			);	
@@ -57,24 +57,24 @@ void PTestGPUData::loadData
 	clCheckError(err);
 
 	outBuffer = Buffer(
-				*cdq->context,
+				*cdq->getContex(),
 				CL_MEM_READ_WRITE,
-				sizeof(float) * devicePermutations * cdq->devques.size(),
+				sizeof(float) * devicePermutations * cdq->getDevQueueSize(),
 				NULL,
 				&err
 				);
 	clCheckError(err);
 
 	extraOutBuffer = Buffer(
-				*cdq->context,
+				*cdq->getContex(),
 				CL_MEM_READ_WRITE,
-				sizeof(float) * devicePermutations * cdq->devques.size(),
+				sizeof(float) * devicePermutations * cdq->getDevQueueSize(),
 				NULL,
 				&err
 				);
 	clCheckError(err);
 
-	err = cdq->devques[0].second->enqueueWriteBuffer
+	err = cdq->getDevQueue(0)->getQueue()->enqueueWriteBuffer
 		(
 			inBuffer,
 			CL_FALSE,
@@ -113,12 +113,12 @@ void PTestGPUData::run(float* writeBackLocation, float* extraWriteBackLocation)
 
 	readEvent.push_back(Event());
 	readEvent.push_back(Event());
-	for (unsigned a = 0; a < cdq->devques.size(); a++)
+	for (unsigned a = 0; a < cdq->getDevQueueSize(); a++)
 		execEvent.push_back(Event());	
 
-	for (unsigned b = 0; b < cdq->devques.size(); b++)
+	for (unsigned b = 0; b < cdq->getDevQueueSize(); b++)
 	{
-		const CommandQueue* q(cdq->devques[b].second);
+		const CommandQueue* q(cdq->getDevQueue(b)->getQueue());
 		err = q->enqueueNDRangeKernel
 			(
 				kernel,
@@ -131,24 +131,24 @@ void PTestGPUData::run(float* writeBackLocation, float* extraWriteBackLocation)
 		clCheckError(err);
 	}
 
-	err = cdq->devques[0].second->enqueueReadBuffer
+	err = cdq->getDevQueue(0)->getQueue()->enqueueReadBuffer
 		(
 			outBuffer,
 			CL_FALSE,
 			0,
-			sizeof(float) * devicePerm * cdq->devques.size(),
+			sizeof(float) * devicePerm * cdq->getDevQueueSize(),
 			writeBackLocation,
 			&execEvent,
 			&readEvent[0]
 		);	
 	clCheckError(err);
 
-	err = cdq->devques[0].second->enqueueReadBuffer
+	err = cdq->getDevQueue(0)->getQueue()->enqueueReadBuffer
 		(
 			extraOutBuffer,
 			CL_FALSE,
 			0,
-			sizeof(float) * devicePerm * cdq->devques.size(),
+			sizeof(float) * devicePerm * cdq->getDevQueueSize(),
 			extraWriteBackLocation,
 			&execEvent,
 			&readEvent[1]

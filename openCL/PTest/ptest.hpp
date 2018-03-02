@@ -55,13 +55,13 @@ namespace pt
 
 			inline bool isThereAChange() const
 			{
-				assert(testExecuted == true);
+				assert (testExecuted == true);
 				return changeFound;
 			}	
 
 			inline unsigned getChangeLocation() const
 			{
-				assert(testExecuted == true);
+				assert (testExecuted == true);
 				return changeLocation;
 			}
 

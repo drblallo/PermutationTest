@@ -21,7 +21,7 @@ namespace pt
 			void run(float* writeBackLocation, float* extraWriteBackLocation);
 			void waitForEnd();
 
-			inline unsigned deviceCount() const {return cdq->devques.size();}
+			inline unsigned deviceCount() const {return cdq->getDevQueueSize();}
 
 		private:
 			const pt::ContextDevQue* cdq;

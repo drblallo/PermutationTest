@@ -16,10 +16,10 @@ PTest::PTest
 		float significativityLevel,
 	   	bool trackLocationOfChange 
 		) :
-	values(valuesCount),
+	values(valuesCount * vectorS),
 	mustCreateProgram(true),
 	mustLoadData(true),
-	vectorSize(vectorS * vectorS),
+	vectorSize(vectorS),
 	changeFound(false),
 	changeLocation(0),
 	testExecuted(false),
@@ -83,6 +83,7 @@ void PTest::setUpGPUData()
 	prime = (KernelLoader::getNearestPrime(values.size() / vectorSize));
 }
 
+#include <iostream>
 void PTest::finilizeTest()
 {
 	float evaluatedStatistic(outValues[0]);
@@ -98,6 +99,8 @@ void PTest::finilizeTest()
 	}
 	unsigned k = iterations - (alpha * iterations);
 
+	std::cout << outValues[0] << "," << std::endl;
+	std::cout << outValues[1] << std::endl;
 	std::sort(outValues.begin(), outValues.end(), std::greater<float>());
 
 	if (outValues[k] > evaluatedStatistic)

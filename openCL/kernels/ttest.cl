@@ -52,6 +52,8 @@ float evaluateStatistic
 		float currentValue = overBounds[overBoundReadIndex];		
 		
 		unsigned int actualPosition = next(&seed, offset, prime);
+		actualPosition = (1-isFirstItem) * (actualPosition);
+		actualPosition += (isFirstItem) * count;
 
 		int isAfterEdge = (int)(actualPosition >= sampleSize);
 		overBounds[overBoundWriteIndex] += currentValue * isAfterEdge;
@@ -73,6 +75,7 @@ float evaluateStatistic
 
 	stat = mean1 - mean2;	
 	
+	return fabs(stat);
 	//deviation
 	count = 0;
 	firstPartAccumulation = 0;
@@ -98,8 +101,8 @@ float evaluateStatistic
 		int mustBeAddToFirstGroup = (int)(actualPosition < cutPoint);
 		int mustBeAddToSecondGroup = (int)(actualPosition >= cutPoint && !isAfterEdge); 
 
-		firstPartAccumulation += mustBeAddToFirstGroup * currentValue;
-		secondPartAccumulation += mustBeAddToSecondGroup * currentValue;
+		firstPartAccumulation += mustBeAddToFirstGroup * ((currentValue - mean1) * (currentValue - mean1));
+		secondPartAccumulation += mustBeAddToSecondGroup * ((currentValue - mean2) * (currentValue - mean2));
 
 		count = count + 1;
 	}
@@ -109,6 +112,8 @@ float evaluateStatistic
 		float currentValue = overBounds[overBoundReadIndex];		
 		
 		unsigned int actualPosition = next(&seed, offset, prime);
+		actualPosition = (1-isFirstItem) * (actualPosition);
+		actualPosition += (isFirstItem) * count;
 
 		int isAfterEdge = (int)(actualPosition >= sampleSize);
 		overBounds[overBoundWriteIndex] += currentValue * isAfterEdge;
@@ -128,7 +133,9 @@ float evaluateStatistic
 	float variance1 = firstPartAccumulation / (cutPoint - 1);
 	float variance2 = secondPartAccumulation / (sampleSize - cutPoint - 1);
 	
-	stat /= sqrt((variance1 * cutPoint) + (variance2 * (sampleSize - cutPoint)));	
+	//stat /= sqrt((variance1 / cutPoint) + (variance2 / (sampleSize - cutPoint)));	
+	//stat /= sqrt(variance1 + variance2);	
+	//stat = stat * sqrt(float(sampleSize));
 
 	return fabs(stat);
 }

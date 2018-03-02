@@ -1,4 +1,5 @@
 ttest 1 1
 # dsadsad
 mann-whitney 1 1
-vectorTTest 1 10
+vectorDifference 1 10
+bugTest 1 1

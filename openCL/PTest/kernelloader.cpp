@@ -58,6 +58,8 @@ const std::vector<KernelInfo>& KernelLoader::getInfo()
 	return loader->info;
 }
 
+//returns true if the VECTORSIZE of a particular statistic NAME is among the allowed one
+//by the config file
 bool KernelLoader::areCompatible(const char* name, unsigned vectorSize)
 {
 	assert(loader != NULL);
@@ -72,6 +74,8 @@ bool KernelLoader::areCompatible(const char* name, unsigned vectorSize)
 	return false;
 }
 
+//returns the list of names of statistics that can be used with a particular
+//vector size, v will be cleared.
 void KernelLoader::getPossibleStatistics(unsigned vectorSize, vector<string>& v)
 {
 	assert(loader != NULL);
@@ -87,6 +91,7 @@ void KernelLoader::getPossibleStatistics(unsigned vectorSize, vector<string>& v)
 			v.push_back(string(info[a].getName()));
 }
 
+//return the minimum vector size of a particular statistic
 unsigned KernelLoader::getMinVectorSize(const char* name)
 {
 	assert(loader != NULL);
@@ -99,6 +104,7 @@ unsigned KernelLoader::getMinVectorSize(const char* name)
 	return 0;
 }
 
+//util function that replace every occurence of a string with another string.
 void ReplaceAll(std::string& str, const std::string& from, const std::string& to) {
 	size_t start_pos = 0;
 	while((start_pos = str.find(from, start_pos)) != std::string::npos) 
@@ -108,6 +114,9 @@ void ReplaceAll(std::string& str, const std::string& from, const std::string& to
 	}
 }
 
+//build the right program for a particular statistic 
+//the program is made of a core file, a util file and 
+//a statistic file. 
 string KernelLoader::getProgram
 	(
 		const char* satistic, 
@@ -118,15 +127,15 @@ string KernelLoader::getProgram
 	)
 {
 	assert(areCompatible(satistic, vectorSize) == true);
-	
+
 	std::string corePath;
 	if (!useCPM)
-		corePath = loader->folder + CORE_KERNEL_FILE;
+		corePath = loader->folder + CORE_KERNEL_FILE; //path to the core file in normal mode
 	else
-		corePath = loader->folder + CPM_KERNEL_FILE;
+		corePath = loader->folder + CPM_KERNEL_FILE; //path to the core file in cpm mode
 
-	std::string statisticPath(loader->folder + satistic + ".cl");
-	std::string utilsPath(loader->folder + UTILS_FILE);
+	std::string statisticPath(loader->folder + satistic + ".cl"); //path to statistis file 
+	std::string utilsPath(loader->folder + UTILS_FILE);// path to util
 
 	std::ifstream coreFile(corePath);
 	std::ifstream sFile(statisticPath);
@@ -142,17 +151,25 @@ string KernelLoader::getProgram
 
 	utils += stat + core;
 	
-	std::string overBuondSize("OVER_BOUND_SIZE");
+	std::string overBuondSize("OVER_BOUND_SIZE"); //the difference between the prime and the vector size
 	std::string valString = std::to_string(prime - sampleSize);
 	ReplaceAll(utils, overBuondSize, valString);
 
-	std::string cpmStartPoint("CPM_START_POINT");
-	valString = std::to_string(20);
-	ReplaceAll(utils, cpmStartPoint, valString);
+	std::string vectorSz("VECTOR_SIZE"); //the difference between the prime and the vector size
+	std::string vsString = std::to_string(vectorSize);
+    ReplaceAll(utils, vectorSz, vsString);
+
+	if (useCPM)
+	{
+		std::string cpmStartPoint("CPM_START_POINT"); //how many values must be skipped when executing the cpm mode
+		valString = std::to_string(20);
+		ReplaceAll(utils, cpmStartPoint, valString);
+	}
 
 	return utils;
 }
 
+//return the max vector size for a particular statisic
 unsigned KernelLoader::getMaxVectorSize(const char* name)
 {
 	assert(loader != NULL);
