@@ -1,9 +1,8 @@
-#include "PTest/kernelloader.hpp"
-#include "PTest/ptest.hpp"
-#include "PTest/environement.hpp"
+#include "kernelloader.hpp"
+#include "ptest.hpp"
 #include <iostream>
 #include <random>
-#include "PTest/rankptest.hpp"
+#include "rankptest.hpp"
 
 int main()
 {

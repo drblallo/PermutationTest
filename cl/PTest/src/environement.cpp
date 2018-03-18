@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <iostream>
 #include <algorithm>
-#include <CL/clext.h>
+#include "clext.h"
 
 using namespace pt;
 using namespace cl;
@@ -28,6 +28,31 @@ bool Environement::discoverPlatforms()
 	return true;
 }
 
+void Environement::printAllDevices()
+{
+	std::vector<cl::Platform> platforms;
+	Platform::get(&platforms);
+	int count(0);
+	for (unsigned b = 0; b < platforms.size(); b++)
+	{
+		std::vector<cl::Device> devices;
+		platforms[b].getDevices(CL_DEVICE_TYPE_ALL, &devices);
+
+		for (unsigned a = 0; a < devices.size(); a++)
+		{
+			std::cout
+					<< "device index: "
+					<< count << ": is "
+					<< devices[a].getInfo<CL_DEVICE_NAME>()
+					<< ", "
+					<< devices[a].getInfo<CL_DEVICE_OPENCL_C_VERSION>()
+					<< std::endl;
+			count++;
+		}
+	}
+
+}
+
 bool Environement::discoverDevices(ContextList& devicesIndex)
 {
 
@@ -40,16 +65,7 @@ bool Environement::discoverDevices(ContextList& devicesIndex)
 		for (unsigned a = 0; a < dev.size(); a++)
 		{
 			devices.push_back(dev[a]);
-			if (devicesIndex.size() == 0)
-				std::cout 
-					<< "device index: "
-					<< deviceCount << ": is " 
-					<< dev[a].getInfo<CL_DEVICE_NAME>() 
-					<< ", " 
-					<< dev[a].getInfo<CL_DEVICE_OPENCL_C_VERSION>() 
-					<< std::endl;
-		
-			deviceCount++;	
+			deviceCount++;
 		}
 	}
 	
@@ -65,25 +81,31 @@ bool Environement::discoverDevices(ContextList& devicesIndex)
 
 const vector<Platform>* Environement::getPlatforms()
 {
-	assert(environement != NULL);
+	if (environement == NULL)
+		return NULL;
 	return &environement->platforms;
 }
 
 const vector<ContextDevQue>* Environement::getContextDevQue()
 {
-	assert(environement != NULL);
+	if (environement == NULL)
+		return NULL;
 	return &environement->contexDevQueues;
 }
 
 unsigned Environement::getContextSize()
 {
-	assert(environement != NULL);
+	if (environement == NULL)
+		return -1;
+
 	return environement->contexDevQueues.size();
 }
 
 unsigned Environement::getQueuesSize()
 {
-	assert(environement != NULL);
+	if (environement == NULL)
+		return -1;
+
 	unsigned quantity(0);
 	for (unsigned b = 0; b < environement->contexDevQueues.size(); b++)
 		quantity += environement->contexDevQueues[b].getDevQueueSize();
@@ -189,6 +211,9 @@ bool Environement::createContextes(ContextList& devIndex)
 
 bool Environement::initEnvironement(ContextList& devicesIndex)
 {
+    if (devicesIndex.size() == 0)
+		return false;
+
 	if (!environement)
 	{
 		bool success(true);

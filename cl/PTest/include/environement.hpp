@@ -55,6 +55,7 @@ namespace pt
 		public:
 			static bool initEnvironement(ContextList& devicesIndex);
 			static void clearEnvironement();
+			static void printAllDevices();
 
 			static const std::vector<cl::Platform>* getPlatforms();
 			static const std::vector<ContextDevQue>* getContextDevQue();

@@ -74,6 +74,15 @@ bool KernelLoader::areCompatible(const char* name, unsigned vectorSize)
 	return false;
 }
 
+void KernelLoader::clearKernelLoader()
+{
+	if (loader == NULL)
+	{
+		delete loader;
+		loader = NULL;
+	}
+}
+
 //returns the list of names of statistics that can be used with a particular
 //vector size, v will be cleared.
 void KernelLoader::getPossibleStatistics(unsigned vectorSize, vector<string>& v)

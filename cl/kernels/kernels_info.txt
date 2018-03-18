@@ -3,3 +3,5 @@ ttest 1 1
 mann-whitney 1 1
 vectorDifference 1 10
 bugTest 1 1
+example 1 10
+

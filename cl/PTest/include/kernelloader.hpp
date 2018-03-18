@@ -12,6 +12,7 @@ namespace pt
 	{
 		public:
 			static void initKernelLoader(const char* pathToFolder);
+			static void clearKernelLoader();
 			static const std::vector<KernelInfo>& getInfo();
 			static bool areCompatible(const char* name, unsigned vectorSize);
 			static void getPossibleStatistics(unsigned vecSize, std::vector<std::string>& v);

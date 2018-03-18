@@ -1,0 +1,6 @@
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+file (GLOB SOURCES "include/*.hpp" "src/*.cpp")
+add_executable(runPTest ${SOURCES})
+#add_executable(runPTest ptest.cpp)
+target_link_libraries(runPTest LIB_PT gtest gtest_main)
+file(COPY ../../kernels DESTINATION ./)

@@ -1,6 +1,6 @@
 #include "ptest.hpp"
 #include "kernelloader.hpp"
-#include <CL/clext.h>
+#include "clext.h"
 #include <algorithm>
 #include <random>
 
@@ -103,12 +103,12 @@ void PTest::finilizeTest()
 	std::cout << outValues[1] << std::endl;
 	std::sort(outValues.begin(), outValues.end(), std::greater<float>());
 
-	if (outValues[k] > evaluatedStatistic)
+	if (outValues[k] < evaluatedStatistic)
 	{
 		changeFound = true;
 		return;
 	}
-	if (outValues[k] < evaluatedStatistic)
+	if (outValues[k] > evaluatedStatistic)
 	{
 		changeFound = false;
 		return;

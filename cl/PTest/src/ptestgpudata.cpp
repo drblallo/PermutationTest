@@ -1,6 +1,6 @@
 #include "ptestgpudata.hpp"
 #include <assert.h>
-#include "CL/clext.h"
+#include "clext.h"
 #include <iostream>
 
 using namespace pt;
