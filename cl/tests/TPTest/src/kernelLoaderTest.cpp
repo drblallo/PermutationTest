@@ -3,7 +3,7 @@
 
 using namespace pt;
 
-TEST(basic_check, kernel_loader_init)
+TEST(kernelLoader, set_up)
 {
 	KernelLoader::initKernelLoader("./kernels");
 

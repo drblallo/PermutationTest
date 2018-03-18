@@ -6,7 +6,7 @@
 #include "environement.hpp"
 
 using namespace pt;
-TEST(basic_check, test_environement_set_up)
+TEST(environement, set_up)
 {
     EXPECT_EQ(Environement::initExecuted(), false);
 
@@ -36,7 +36,7 @@ TEST(basic_check, test_environement_set_up)
     EXPECT_EQ(Environement::initExecuted(), false);
 }
 
-TEST(basic_check, test_print_all_devices)
+TEST(environement, print_all_devices)
 {
     Environement::printAllDevices();
     EXPECT_EQ(0, 0);

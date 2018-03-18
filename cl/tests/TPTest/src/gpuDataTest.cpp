@@ -2,7 +2,7 @@
 #include "ptestgpudata.hpp"
 
 using namespace pt;
-TEST(basic_test, TEST_GPU_DATA)
+TEST(gpuData, none)
 {
 
 

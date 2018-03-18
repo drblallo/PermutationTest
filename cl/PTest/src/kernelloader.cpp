@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <fstream>
 #include <algorithm>
+#include "sourceloader.hpp"
 
 using namespace pt;
 using namespace std;
@@ -113,15 +114,6 @@ unsigned KernelLoader::getMinVectorSize(const char* name)
 	return 0;
 }
 
-//util function that replace every occurence of a string with another string.
-void ReplaceAll(std::string& str, const std::string& from, const std::string& to) {
-	size_t start_pos = 0;
-	while((start_pos = str.find(from, start_pos)) != std::string::npos) 
-	{
-		str.replace(start_pos, from.length(), to);
-		start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
-	}
-}
 
 //build the right program for a particular statistic 
 //the program is made of a core file, a util file and 
@@ -137,45 +129,13 @@ string KernelLoader::getProgram
 {
 	assert(areCompatible(satistic, vectorSize) == true);
 
-	std::string corePath;
-	if (!useCPM)
-		corePath = loader->folder + CORE_KERNEL_FILE; //path to the core file in normal mode
-	else
-		corePath = loader->folder + CPM_KERNEL_FILE; //path to the core file in cpm mode
-
-	std::string statisticPath(loader->folder + satistic + ".cl"); //path to statistis file 
-	std::string utilsPath(loader->folder + UTILS_FILE);// path to util
-
-	std::ifstream coreFile(corePath);
-	std::ifstream sFile(statisticPath);
-	std::ifstream utilsFile(utilsPath);
-
-	assert (coreFile.good() == true);
-	assert (sFile.good() == true);
-	assert (utilsFile.good() == true);
-
-	string core((istreambuf_iterator<char>(coreFile)), (istreambuf_iterator<char>()));	
-	string stat((istreambuf_iterator<char>(sFile)), (istreambuf_iterator<char>()));
-	string utils((istreambuf_iterator<char>(utilsFile)), (istreambuf_iterator<char>()));
-
-	utils += stat + core;
-	
-	std::string overBuondSize("OVER_BOUND_SIZE"); //the difference between the prime and the vector size
-	std::string valString = std::to_string(prime - sampleSize);
-	ReplaceAll(utils, overBuondSize, valString);
-
-	std::string vectorSz("VECTOR_SIZE"); //the difference between the prime and the vector size
-	std::string vsString = std::to_string(vectorSize);
-    ReplaceAll(utils, vectorSz, vsString);
-
+	SourceLoader ld(loader->folder, satistic, useCPM);
+	ld.replaceEveryOccurence("OVER_BOUND_SIZE", prime - sampleSize);
+	ld.replaceEveryOccurence("VECTOR_SIZE", vectorSize);
 	if (useCPM)
-	{
-		std::string cpmStartPoint("CPM_START_POINT"); //how many values must be skipped when executing the cpm mode
-		valString = std::to_string(20);
-		ReplaceAll(utils, cpmStartPoint, valString);
-	}
+		ld.replaceEveryOccurence("CPM_START_POINT", 20);
 
-	return utils;
+	return ld.getSource();
 }
 
 //return the max vector size for a particular statisic
