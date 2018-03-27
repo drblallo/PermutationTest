@@ -87,9 +87,26 @@ void PTest::setUpGPUData()
 void PTest::finilizeTest()
 {
 	float evaluatedStatistic(outValues[0]);
+	unsigned k = iterations - (alpha * iterations);
+
+	std::cout << outValues[0] << "," << std::endl;
+	std::cout << outValues[1] << std::endl;
+	std::sort(outValues.begin(), outValues.end(), std::less<float>());
+
+	if (outValues[k] < evaluatedStatistic)
+	{
+		changeFound = true;
+		return;
+	}
+
+	if (outValues[k] > evaluatedStatistic)
+	{
+		changeFound = false;
+		return;
+	}
+
 	unsigned higherOccurences(0);
 	unsigned equalOccurences(0);
-
 	for (unsigned a = 0; a < outValues.size(); a++)
 	{
 		if (evaluatedStatistic == outValues[a])
@@ -97,24 +114,8 @@ void PTest::finilizeTest()
 		if (evaluatedStatistic < outValues[a])
 			higherOccurences++;
 	}
-	unsigned k = iterations - (alpha * iterations);
 
-	std::cout << outValues[0] << "," << std::endl;
-	std::cout << outValues[1] << std::endl;
-	std::sort(outValues.begin(), outValues.end(), std::greater<float>());
-
-	if (outValues[k] < evaluatedStatistic)
-	{
-		changeFound = true;
-		return;
-	}
-	if (outValues[k] > evaluatedStatistic)
-	{
-		changeFound = false;
-		return;
-	}
-
-	float treshold((alpha * iterations) - higherOccurences);	
+	float treshold((alpha * iterations) - higherOccurences);
 	treshold /= equalOccurences;
 		
 	std::default_random_engine eng;
@@ -128,17 +129,16 @@ void PTest::finilizeTest()
 
 void PTest::runTest()
 {
-	if (mustCreateProgram)	
+	if (mustCreateProgram)
 		createProgram();
 
 	if (mustLoadData)
 		loadData();
-	
+
 	outValues.resize(iterations);
 	extraOutValues.resize(iterations);
 	unsigned qSize(Environement::getQueuesSize());
 	unsigned workSize(iterations / qSize);
-
 	unsigned offset(0);
 	for (unsigned a = 0; a < gpuData.size(); a++)
 	{

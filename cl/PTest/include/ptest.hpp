@@ -81,6 +81,21 @@ namespace pt
 				return testExecuted;
 			}
 
+			inline unsigned getIterations() const
+			{
+				return iterations;
+			}
+
+			inline unsigned getVectorSize() const
+			{
+				return vectorSize;
+			}
+
+			inline unsigned  getSampleSize() const
+			{
+				return values.size() / vectorSize;
+			}
+
 			void runTest();
 
 		protected:
