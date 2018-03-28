@@ -167,7 +167,7 @@ function generateTestCase()
     s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
     saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
 
-    type = "protein_rotated"
+    type = "protein_rotated";
     
      samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
     samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
@@ -192,7 +192,7 @@ function generateTestCase()
     s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
     saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
 
-    type = "creditCards_rotated"
+    type = "creditCards_rotated";
     
      samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
     samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
@@ -218,7 +218,7 @@ function generateTestCase()
     s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
     saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
 
-    type = "sensors_rotated"
+    type = "sensors_rotated";
     
      samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
     samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
@@ -240,7 +240,7 @@ function generateTestCase()
     s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
     saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
 
-    type = "miniboone_rotated"
+    type = "miniboone_rotated";
     
      samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
     samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
@@ -265,8 +265,8 @@ function generateTestCase()
 end
 
 function ret = loadData(shift, fileName, sampleSize, vectorSize)
-    ret = zeros(sampleSize, 1)
-    t = open('/home/massimo/datasets/'+fileName);
+    ret = zeros(sampleSize, 1);
+    t = open(strcat('/home/massimo/datasets/',fileName));
     v = rand(1, 8);
     v = v / norm(v) * shift;
     for a = [1:sampleSize]
@@ -278,8 +278,8 @@ function ret = loadData(shift, fileName, sampleSize, vectorSize)
 end
 
 function ret = loadDataRotated(rotated, fileName, sampleSize, vectorSize)
-    ret = zeros(sampleSize, 1)
-    t = open('/home/massimo/datasets/'+fileName);
+    ret = zeros(sampleSize, 1);
+    t = open(strcat('/home/massimo/datasets/'+fileName));
     QR_REG_PARAM  = 0.01
 
     Sigma0 = randn(vectorSize);
