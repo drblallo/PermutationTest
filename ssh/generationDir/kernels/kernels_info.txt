@@ -3,6 +3,7 @@ ttest 1 1
 mann-whitney 1 1
 vectorDifference 1 10
 vectorDifference2 1 10
+vectorDifference3 1 10
 innerProduct 1 10
 bugTest 1 1
 example 1 10

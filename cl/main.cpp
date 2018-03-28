@@ -147,6 +147,11 @@ void testAll()
 		pt::PTest testP(1, 1000, s.c_str(), a, 0.05f);
 		pt::PTest testP2(8, 1000, s.c_str(), a, 0.05f);
 		testSingle(testP, testP2, s);
+
+		s = "vectorDifference3";
+		pt::PTest testR(1, 1000, s.c_str(), a, 0.05f);
+		pt::PTest testR2(8, 1000, s.c_str(), a, 0.05f);
+		testSingle(testR, testR2, s);
 	}
 }
 

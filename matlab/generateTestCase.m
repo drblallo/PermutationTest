@@ -152,7 +152,107 @@ function generateTestCase()
     
     s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
     saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+    
+    
+    
+    
+    
+    type = "protein_shift_media";
+    file = 'protein_standardized.mat';
+     samples1 = loadData(0, file, sampleSize, vectorSize);
+    samples2 = loadData(1, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
 
+    type = "protein_rotated"
+    
+     samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
+    samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+    
+    
+   
+    
+    
+    
+     type = "creditCards_shift_media";
+    file = 'creditCards_standardized.mat';
+     samples1 = loadData(0, file, sampleSize, vectorSize);
+    samples2 = loadData(1, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+
+    type = "creditCards_rotated"
+    
+     samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
+    samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+    
+    
+    
+    
+    
+    
+    
+     type = "sensors_shift_media";
+    file = 'sensorDrive_standardized.mat';
+     samples1 = loadData(0, file, sampleSize, vectorSize);
+    samples2 = loadData(1, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+
+    type = "sensors_rotated"
+    
+     samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
+    samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+    
+    
+    
+     type = "miniboone_shift_media";
+    file = 'MiniBooNE_PID_standardized.mat';
+     samples1 = loadData(0, file, sampleSize, vectorSize);
+    samples2 = loadData(1, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+
+    type = "miniboone_rotated"
+    
+     samples1 = loadDataRotated(false, file, sampleSize, vectorSize);
+    samples2 = loadDataRotated(true, file, sampleSize, vectorSize);
+    
+    [pval, T2] = hotell2(samples1,samples2);
+    
+    s = [s, strcat(type," ", string(pval < 0.05), " ", string(pval < 0.05), " ", string(vectorSize))];
+    saveD(char(strcat("./generationDir/", type, ".mat")), [samples1; samples2]);
+    
+    
+    
+    
     fileID = fopen("./generationDir/index.txt", "w+");
     t = size(s);
     v = t(2)
@@ -160,7 +260,45 @@ function generateTestCase()
         fprintf(fileID, "%s\n", s(a));
     end
      fclose(fileID);
+     
+         
 end
+
+function ret = loadData(shift, fileName, sampleSize, vectorSize)
+    ret = zeros(sampleSize, 1)
+    t = open('/home/massimo/datasets/'+fileName);
+    v = rand(1, 8);
+    v = v / norm(v) * shift;
+    for a = [1:sampleSize]
+       ind = randi(size(t.dataset, 1));
+       s = t.dataset(ind, :);
+       s = s(1:vectorSize);
+       ret(a, :) = v + s;
+    end
+end
+
+function ret = loadDataRotated(rotated, fileName, sampleSize, vectorSize)
+    ret = zeros(sampleSize, 1)
+    t = open('/home/massimo/datasets/'+fileName);
+    QR_REG_PARAM  = 0.01
+
+    Sigma0 = randn(vectorSize);
+    [Q, R] = qr(Sigma0);
+    D = diag(abs(2*randn(1,vectorSize)) + QR_REG_PARAM);
+    Sigma0 = Q * D * Q';
+    
+    for a = [1:sampleSize]
+       ind = randi(size(t.dataset, 1));
+       s = t.dataset(ind, :);
+       s = s(1:vectorSize);
+       if rotated
+        ret(a, :) = Sigma0 * s;
+       else
+         ret(a, :) = s;
+       end
+    end
+end
+
 
 function ret = generateMixtureShifMedia(shift, sampleSize, vectorSize)
     ret = zeros(sampleSize, 1);
