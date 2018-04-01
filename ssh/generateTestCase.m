@@ -255,7 +255,7 @@ function generateTestCase()
     
     fileID = fopen("./generationDir/index.txt", "w+");
     t = size(s);
-    v = t(2)
+    v = t(2);
     for a = [1:v]
         fprintf(fileID, "%s\n", s(a));
     end
@@ -265,7 +265,7 @@ function generateTestCase()
 end
 
 function ret = loadData(shift, fileName, sampleSize, vectorSize)
-    ret = zeros(sampleSize, 1);
+    ret = zeros(sampleSize, vectorSize);
     t = open(strcat('/home/massimo/datasets/',fileName));
     v = rand(1, 8);
     v = v / norm(v) * shift;
@@ -278,8 +278,8 @@ function ret = loadData(shift, fileName, sampleSize, vectorSize)
 end
 
 function ret = loadDataRotated(rotated, fileName, sampleSize, vectorSize)
-    ret = zeros(sampleSize, 1);
-    t = open(strcat('/home/massimo/datasets/'+fileName));
+    ret = zeros(sampleSize, vectorSize);
+    t = open(strcat('/home/massimo/datasets/',fileName));
     QR_REG_PARAM  = 0.01
 
     Sigma0 = randn(vectorSize);
@@ -292,7 +292,7 @@ function ret = loadDataRotated(rotated, fileName, sampleSize, vectorSize)
        s = t.dataset(ind, :);
        s = s(1:vectorSize);
        if rotated
-        ret(a, :) = Sigma0 * s;
+        ret(a, :) = Sigma0 * (s');
        else
          ret(a, :) = s;
        end
@@ -352,8 +352,8 @@ end
 function saveD(dest, sample)
     fileID = fopen(dest, 'w');
     s = size(sample);
-    s2 = s(2)
-    s = s(1)
+    s2 = s(2);
+    s = s(1);
     for a = [1:s]
         for b = [1:s2]
             fprintf(fileID, "%f ", sample(a, b));
