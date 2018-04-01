@@ -160,7 +160,7 @@ int main()
 	pt::ContextList indicies;
 	indicies.push_back(pt::DevicesList());
 	indicies[0].push_back(0);
-	
+
 	pt::KernelLoader::initKernelLoader("./kernels");
 	pt::Environement::initEnvironement(indicies);
 

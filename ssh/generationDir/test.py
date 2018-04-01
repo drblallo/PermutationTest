@@ -30,6 +30,7 @@ def readFile(file):
     ns2 = 0;
 
     success = {}
+    l = []
     a = 2
 
     while a < 10000:
@@ -51,7 +52,11 @@ def readFile(file):
     print (f1)
     print (f2)
     print (success[8192] / 1000)
-    createGraph(file, f1, f2, list(success.values()))
+    a = 2
+    while a < 10000:
+        l.append(float(success[a]) / 10000)
+        a = a * 2
+    createGraph(file, f1, f2, l)
 
 os.chdir("./outputs/")
 for file in glob.glob("*.txt"):
