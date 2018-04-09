@@ -8,4 +8,5 @@ innerProduct 1 10
 bugTest 1 1
 example 1 10
 pairedProducts 1 10
+covariance 1 10
 
