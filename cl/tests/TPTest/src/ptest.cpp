@@ -1,28 +1,7 @@
 #include "gtest/gtest.h"
-#include "ptest.hpp"
-#include "kernelloader.hpp"
-#include "environement.hpp"
+#include "pttest.hpp"
 
 using namespace pt;
-
-struct PTTest : testing::Test
-{
-	PTTest()
-	{
-		ContextList indicies;
-		indicies.push_back(pt::DevicesList());
-		indicies[0].push_back(0);
-
-		KernelLoader::initKernelLoader("./kernels");
-		Environement::initEnvironement(indicies);
-	}
-
-	~PTTest()
-	{
-		Environement::clearEnvironement();
-		KernelLoader::clearKernelLoader();
-	}
-};
 
 TEST_F(PTTest, pt_test)
 {

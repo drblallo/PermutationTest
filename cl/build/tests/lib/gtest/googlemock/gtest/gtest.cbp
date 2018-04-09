@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="gtest"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\tests\;CMake Files\tests\lib\;CMake Files\tests\lib\gtest\;CMake Files\tests\lib\gtest\googlemock\;CMake Files\tests\lib\gtest\googlemock\cmake\;CMake Files\tests\lib\gtest\googletest\;CMake Files\tests\lib\gtest\googletest\cmake\;CMake Files\tests\TPTest\;CMake Files\CLUtils\;CMake Files\PTest\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest_main">
+				<Option output="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/libgtest_maind.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/include"/>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest_main"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest_main/fast">
+				<Option output="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/libgtest_maind.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/include"/>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest_main/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest">
+				<Option output="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/libgtestd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/include"/>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gtest/fast">
+				<Option output="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/libgtestd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/include"/>
+					<Add directory="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 gtest/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build/tests/lib/gtest/googlemock/gtest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/src/gtest-all.cc">
+			<Option target="gtest"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/src/gtest_main.cc">
+			<Option target="gtest_main"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googlemock/cmake/gmock_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googlemock\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/internal_utils.cmake">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/internal_utils.cmake">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/internal_utils.cmake">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/internal_utils.cmake">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/internal_utils.cmake">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/lib/gtest/googletest/cmake/gtest_main.pc.in">
+			<Option virtualFolder="CMake Files\tests\lib\gtest\googletest\cmake\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/TPTest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\TPTest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/tests/TPTest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\TPTest\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/CLUtils/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\CLUtils\"/>
+		</Unit>
+		<Unit filename="/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/PTest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\PTest\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

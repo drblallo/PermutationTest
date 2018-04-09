@@ -1,5 +1,5 @@
 function generateTestCase()
-    
+    rng('shuffle')
     sampleSize = 500;
     vectorSize = 1;
     type = "univariato_gaussiano_cambio_media";

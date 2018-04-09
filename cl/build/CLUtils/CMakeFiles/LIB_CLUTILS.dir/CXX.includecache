@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../CLUtils/include/clext.h
+
+/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/CLUtils/src/clext.cpp
+clext.h
+/home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/CLUtils/src/clext.h
+stdio.h
+-
+

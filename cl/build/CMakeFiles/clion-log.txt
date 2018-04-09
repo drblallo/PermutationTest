@@ -1,0 +1,29 @@
+/home/massimo/Downloads/CLion/clion-2017.3.4/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for CL_VERSION_2_0
+-- Looking for CL_VERSION_2_0 - found
+-- Found OpenCL: /usr/lib/x86_64-linux-gnu/libOpenCL.so (found version "2.0") 
+-- Found PythonInterp: /home/massimo/miniconda3/bin/python (found version "3.6.3") 
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/massimo/Documents/Programmi/uni/progetto/permutationTest/cl/build

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLIB_PT.a  CMakeFiles/LIB_PT.dir/src/environement.cpp.o CMakeFiles/LIB_PT.dir/src/kernelinfo.cpp.o CMakeFiles/LIB_PT.dir/src/kernelloader.cpp.o CMakeFiles/LIB_PT.dir/src/ptest.cpp.o CMakeFiles/LIB_PT.dir/src/ptestgpudata.cpp.o CMakeFiles/LIB_PT.dir/src/rankptest.cpp.o CMakeFiles/LIB_PT.dir/src/sourceloader.cpp.o
+/usr/bin/ranlib libLIB_PT.a

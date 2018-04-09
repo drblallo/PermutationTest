@@ -152,6 +152,11 @@ void testAll()
 		pt::PTest testR(1, 1000, s.c_str(), a, 0.05f);
 		pt::PTest testR2(8, 1000, s.c_str(), a, 0.05f);
 		testSingle(testR, testR2, s);
+
+		s = "covariance";
+		pt::PTest testCO(1, 1000, s.c_str(), a, 0.05f);
+		pt::PTest testCO2(8, 1000, s.c_str(), a, 0.05f);
+		testSingle(testCO, testCO2, s);
 	}
 }
 

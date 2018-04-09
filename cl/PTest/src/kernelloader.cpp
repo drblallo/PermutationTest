@@ -132,6 +132,7 @@ string KernelLoader::getProgram
 	SourceLoader ld(loader->folder, satistic, useCPM);
 	ld.replaceEveryOccurence("OVER_BOUND_SIZE", prime - sampleSize);
 	ld.replaceEveryOccurence("VECTOR_SIZE", vectorSize);
+	ld.replaceEveryOccurence("SAMPLE_SIZE", sampleSize);
 	if (useCPM)
 		ld.replaceEveryOccurence("CPM_START_POINT", 20);
 
