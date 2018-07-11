@@ -107,9 +107,47 @@ float runTests(TestData* data, float (*fun1)(), float (*fun2)(), FILE* f)
 	return count/(float)ITERATIONS;
 }
 
+#include<sys/timeb.h>
+
+#include <stdint.h>
+uint64_t now()
+{
+	struct timeb timerBuffer;
+	ftime(&timerBuffer);
+	return (uint64_t) (((timerBuffer.time * 1000)+ timerBuffer.time));
+}
+
+void testSpeed()
+{
+	for (int a = 2; a < 10000; a = a * 2)
+	{
+		TestData data;
+		data.alpha = ALPHA;
+		data.iterationsCount = a;
+		data.sampleLenght = 1000;
+		data.cutPoint = 500;
+		data.sample = (float*) malloc(sizeof(float) * data.sampleLenght);
+		data.statistic = evaluateStatisticMean;
+		
+		for (int b = 0; b < 1000; b++)
+			data.sample[b] = 0;
+	
+
+		uint64_t before = now();
+		for (int b = 0; b < 1000; b++)
+			runPermutationTest(&data);
+		uint64_t after = now();
+
+		printf("permutation %d: elapsed %lu milliseconds\n", a, after - before);
+	
+	}
+}
+
 int main()
 {
 
+	testSpeed();
+	return 0;
 
 	FILE* f;
 

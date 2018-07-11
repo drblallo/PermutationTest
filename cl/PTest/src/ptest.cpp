@@ -89,8 +89,6 @@ void PTest::finilizeTest()
 	float evaluatedStatistic(outValues[0]);
 	unsigned k = iterations - (alpha * iterations);
 
-	std::cout << outValues[0] << "," << std::endl;
-	std::cout << outValues[1] << std::endl;
 	std::sort(outValues.begin(), outValues.end(), std::less<float>());
 
 	if (outValues[k] < evaluatedStatistic)

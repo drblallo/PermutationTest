@@ -1,0 +1,58 @@
+
+\documentclass[a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{svg}
+\usepackage{draftwatermark}
+\usepackage{fixltx2e}
+\SetWatermarkText{Draft}
+\SetWatermarkScale{3}
+\SetWatermarkAngle{0}
+
+\graphicspath{{images/}}
+
+\lstdefinestyle{CStyle}{
+	backgroundcolor =\color{white},
+	commentstyle=\color{green},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{gray},
+	stringstyle=\color{mPurple},	
+	basicstyle=\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2,
+	language=C	
+}
+
+
+\begin{document}
+	
+	\author{Boracchi Giacomo \and Antonio Miele \and Carrera Diego\and \\ Fioravanti Massimo}
+	\title{Progetto Ingegneria Informatica \\ Datastream Change Detection}
+	\maketitle
+	\tableofcontents
+	\clearpage
+	
+	\include{introduzione}
+	\include{teoria}
+	
+	\include{implementazione}
+	\include{ottimizzazione}
+	\include{risultati}
+\end{document}

@@ -1,0 +1,22 @@
+\section{Fondamenti teorici}
+
+
+\subsection{Statistica}
+Definiamo come statistica una funzione che associa a una popolazione un numero reale che la rappresenta. Ad esempio la funzione che associa ad una popolazione di lunghezze la media di tali valori è una statistica.
+ 
+
+\subsection{Test di ipotesi}
+Per test di verifica di ipotesi si intende un test ideato per verificare su un ipotesi risulta essere vera o meno, e per ipotesi si intende un affermazione riguardante oggetti del mondo reale. I test di ipotesi di dividono in test di ipotesi deterministici o statistici, ed è su questi ultimi che ci concentreremo.
+
+L'ipotesi da verificare prende il nome di H\textsubscript{0} o ipotesi nulla. Si definisce invece l'ipotesi contraria come H\textsubscript{1} o ipotesi alternativa.
+Come conseguenza di un test vi possono essere due tipi di errori, rifiutare l'ipotesi nulla quando essa era vera, come ad esempio non identificare una malattia in un paziente malato, oppure accettare l'ipotesi nulla quando essa è falsa, ad esempio identificare una malattia in un paziente sano. Il primo caso prende il nome di errore di primo caso, e il secondo errore di secondo tipo.
+Minimizzare gli errori del primo tipo senza curarsi degli errori del secondo è triviale, poiché è sufficiente accettare ogni volta l'ipotesi. Similarmente è vero l'inverso, rifiutare sempre l'ipotesi H\textsubscript{0} permette di minimizzare gli errori del secondo tipo ma garantisce di massimizzare quelli del primo.
+Di conseguenza la maniera corretta di formulare un test é garantire costanti gli errori del primo tipo, ad esempio il 5\% dei casi, e si desidera minimizzare gli errori del secondo tipo. La soglia mantenuta costante è detta $\alpha$.
+Il valore calcolato come 1 meno errori del secondo tipo è detto potenza del test.
+
+Come conseguenza del fatto che gli errori del primo tipo devono essere costanti ne consegue che per certe statistiche è possibile calcolare dei valori di soglia che quando confrontati con la statistica valutata per una popolazione che rispetta l'ipotesi h\textsubscript{0} soddisfano la richiesta che gli errori del primo tipo siano esattamente $\alpha$\%.
+Questi valori, detti soglie, sono poi utilizzati come di valori di confronto nel caso di popolazioni che si vuole determinare se soddisfano l'ipotesi nulla o meno, e in questa maniera si può ricavare una procedura algoritmica che permetta di eseguire il test di ipotesi.
+
+\subparagraph{Permutation Test}
+In alcuni casi le soglie dipendono dalla struttura dei dati in ingresso, in particolare quando i dati hanno una natura vettoriale, e di conseguenza non è possibile calcolarle in anticipo. In tali situazioni è necessario affidarsi ad altre soluzioni e una di queste è il permutation test che permette di stabilire se due gruppi provengono dalla stessa popolazione. La considerazione sulla quale si basa un permutation test è che se si permutano i due gruppi casualmente allora in media $\alpha$ \% delle volte la statistica calcolata avrà un valore maggiore della soglia ignota, poiché permutando il campione allora sarà impossibile distinguere gli elementi appartenenti al primo gruppo da quelli appartenenti al secondo. 
+Se si ordinano le statistiche valutate sulle popolazioni permutate e si seleziona quella nella posizione numero permutazioni * (1-$\alpha$). Tale valore risulta essere una stima della soglia, ed è quindi possibile eseguire test di ipotesi statistica pur essendo del tutto ignari della distribuzione di una popolazione.

@@ -1,0 +1,30 @@
+\section{introduzione}
+
+
+\subsection{Descrizione del problema}
+\paragraph{Test di ipotesi}
+Varie branche scientifiche e economiche moderne, come ad esempio la diagnostica medica, si basano sulla capacità di discernere le differenze tra popolazioni di oggetti. Se si riesce a descrivere ciò che si sta analizzando tramite variabili numeriche allora ne consegue che si sta affrontando un problema di natura matematica.
+Le procedure che permettono di operare tali distinzioni sono dette test di verifica di ipotesi e la loro formulazione rigorosa giace nel dominio della statistica.
+Talvolta il costo computazionale necessario per risolvere tali operazioni è assai elevato, in particolare perché la complessità degli algoritmi è spesso legata alla dimensione del campione. Inoltre se si tenta di analizzare un evento periodico reale che avviene ad alta frequenza è importante riuscire a garantire la maggiore velocità di analisi possibile, poiché ciò permette di estendere l'uso dei test di ipotesi a nuovi ambiti.
+Per queste ragione è interessante studiare implementazioni efficienti dei test statistici.
+
+\paragraph{Permutation Test}
+Tal volta è possibile porre delle assunzioni riguardo quali sono i parametri delle popolazioni che si vuole studiare, in tali casi è spesso possibile creare dei test specifici particolarmente potenti. Tali test prendono il nome di test parametrici.
+Altre volte le caratteristiche delle popolazioni sono completamente ignote, poiché magari derivano da eventi naturali. I test ideati per lavorare con queste popolazioni prendono il nome di test non parametrici. 
+I test di permutazione sono particolari all'interno di questa categoria perché il loro funzionamento si basa sul calcolare una statistica riguardanti le popolazioni che si intende confrontare, per poi permutare casualmente i due gruppi e ripetere il calcolo. Si itera questa procedura sino ad aver raccolto dati a sufficienza, e si confronta la statistica della popolazione originale contro una soglia calcolata dalle statistiche delle permutazioni permutate. Se il primo numero risulta essere maggiore del secondo allora ne consegue che le due popolazioni non possono disporre delle stesse caratteristiche, poiché se quello fosse stato il caso allora non si discosterebbe così tanto dal caso medio ottenuto dalle permutazioni.
+
+\paragraph{Schede Grafiche}
+Gli ultimi 15 anni hanno visto l'affermarsi della tecnologia delle schede grafiche come strumento utile alla computazione ad alta velocità.
+Progettate inizialmente per la creazione di immagini 3D da presentare a schermo, tali unità di calcolo presentano caratteristiche che le rendono adatte a eseguire calcoli in parallelo.
+Una scheda grafica è composta svariate unità di calcolo ognuna disposta dei propri registri privati, queste unità sono poi raggruppate a gruppi i quali condividono una memoria locale e infine tutte loro accedono alla stessa memoria globale. 
+I gruppi condividono anche parte delle componenti hardware, in particolare quelle legate al controllo del flusso del programma. Ciò implica che mentre il consumo energetico è minore rispetto alle cpu convenzionali, le unità di calcolo all'interno di un gruppo devono necessariamente eseguire le stesse operazioni. Tale tecnica prende il nome di SIMD, cioè Single Instruction Multiple Data, poiché disponendo di registri diversi per ogni nucleo di calcolo è possibile raggiungere risultati distinti su ognuno di essi, anche se la procedura è la stessa.
+
+Tale architettura permette quindi di accelerare tutti gli algoritmi che possono essere eseguiti in parallelo. Se si seleziona una statistica adatta, questo è esattamente il caso riguardante i permutation test, poiché le permutazione non necessitano di conoscere quale fosse stato il risultato della permutazione precedente, mentre i calcolo della statistica segue le stesse operazioni in ogni unità di calcolo.
+
+\paragraph{Risultati}
+In questo documento si presenterà una soluzione software del problema sopra descritto destinata all'uso su schede grafiche dotata delle seguenti caratteristiche:
+\begin{itemize}
+	\item \textbf{Test multivariati} l'analisi di campioni multidimensionali risulta particolarmente difficile e costosa, la nostra implementazione risolve tale problema per costruzione.
+	\item \textbf{Memoria lineare} il nostro algoritmo richiede memoria pari a quella necessaria per allocare l'input in ingresso. Tale soluzione è ideale poiché la memoria disponibile sulle schede grafiche è limitata e garantire tale proprietà nel problema affrontato è difficile.
+	\item \textbf{Accesso sequenziale} il nostro algoritmo accede alla memoria in maniera sequenziale ed esattamente una volta per ogni elemento, tale soluzione è ideale poiché l'accesso non ordinato rallenta significativamente l'efficienza delle schede grafiche.
+\end{itemize}

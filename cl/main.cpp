@@ -160,6 +160,28 @@ void testAll()
 	}
 }
 
+#include <chrono>
+typedef std::chrono::high_resolution_clock Clock;
+
+void testSpeed()
+{
+	for (int a = 2; a < 10000; a = a * 2)
+	{
+		pt::PTest test(1, 1000, "ttest", a, 0.05f);
+		test.setCutPoint(500);
+		for (int b = 0; b < test.getSampleSize(); b++)
+			test.setValue(0, b, 0);
+
+		auto start(Clock::now());
+		for (int b = 0; b < 1000; b++)
+			test.runTest();
+		auto end(Clock::now());
+		std::cout << "permutazioni: " << a << ": "
+					 << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
+					 << " milliseconds" << std::endl;
+	}
+}
+
 int main()
 {
 	pt::ContextList indicies;
@@ -169,8 +191,10 @@ int main()
 	pt::KernelLoader::initKernelLoader("./kernels");
 	pt::Environement::initEnvironement(indicies);
 
+	testSpeed();
+
 	//runAllTests();
-	testAll();
+	//testAll();
 
 	pt::Environement::clearEnvironement();
 	pt::KernelLoader::clearKernelLoader();

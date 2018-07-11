@@ -1,0 +1,118 @@
+\section{Ottimizzazione}
+
+\subsection{Permutazioni a spazio costante e visita ordinata}
+Poiché le computazioni avvengono in parallelo, non è posibile permutare sul posto i dati in ingresso, poiché ciò richiederebbe una quantità di memoria pari alla dimensione dei dati in ingresso moltiplicati per il numero di permutazioni, poiché ogni unità di calcolo deve allocare localmente i dati permutati. Risulta quindi imperativo utilizzare un algoritmo a spazio costante, poiché la memoria disponibile per ogni singolo core è limitata.
+Si mostrerà ora come è possibile computare statistiche che operano in maniera sequenziale senza precalcolare la permutazione da applicare ai dati.
+
+Prendiamo come esempio la statistica che date due popolazioni ritorna la differenza delle loro medie.
+
+\begin{lstlisting}[style=CStyle]
+float evaluateStatistic
+(
+	__global const float* in, 
+	const unsigned int sampleSize, 
+	const unsigned int cutPoint
+)
+{
+	float meanSample1 = 0;
+	float meanSample2 = 0;
+	
+	for (int a = 0; a < cutPoint; a++)
+		meanSample1 += in[a];
+	meanSampel1 /= cutPoint;
+		
+	for (int a = cutPoint < sampleSize; a++)
+		meanSample2 += in[a];
+	meanSample2 /= sampleSize - cutPoint;	
+	
+	return abs(meanSample1 - meanSample2);
+}
+\end{lstlisting}
+
+grazie alla funzione di permutazione possiamo mappare gli indici sequenziali al loro equivalente permutato, così facendo perdiamo però la possibilità di capire se l'elemento appartiene al primo gruppo o al secondo.
+La funzione deve quindi essere modificata in:
+
+\begin{lstlisting}[style=CStyle]
+	float evaluateStatistic
+	(
+	__global const float* in,
+	int prime,
+	int index,
+	const unsigned int sampleSize, 
+	const unsigned int cutPoint
+	)
+	{
+		float meanSample1 = 0;
+		float meanSample2 = 0;
+		
+		for (int a = 0; a < sampleSize; a++)
+		{
+			int realIndex = permutateSingle(index++, prime);
+			
+			if (realIndex < cutPoint)
+				meanSample1 += in[realIndex];
+			else
+				meanSample2 += in[realIndex];
+		}
+		
+		meanSampel1 /= cutPoint;
+		meanSample2 /= sampleSize - cutPoint;	
+		
+		return abs(meanSample1 - meanSample2);
+	}
+\end{lstlisting}
+
+
+Si noti che questo algoritmo dispone di un altra caratteristica, l'accesso alla memoria è sequenziale e tutti i nuclei accedono contemporaneamente allo stesso elemento. Poiché le memorie globali delle schede grafiche sono molto più lente che le memorie private, questa soluzione migliora sensibilmente le performance dell'algoritmo.
+
+\subsection{Campioni di dimensione qualsiasi}
+Come precedentemente indicato, per colpa del generatore di numeri casuali siamo costretti a utilizzare campioni la cui dimensione è un numero primo. Tale restrizione è particolarmente insoddisfacente, quindi si discuterà ora di come rimuoverla:
+Se la dimensione del campione è minore del numero primo è possibile allocare come variabile locale un array la cui dimensione è pari alla differenza tra i due numeri. Ogni volta che si estrae dalla permutazione un numero maggiore della dimensione del campione si salva il valore proveniente dall'array di input nell'array locale in maniera sequenziale. Dopo aver processato tutti gli elementi dell'array globale si processano nuovamente tutti quelli allocati localmente, con la garanzia che ora l'indice estratto sarà minore della dimensione del campione, poiché tutti gli indici maggiori sono già stati valutati.
+
+
+\begin{lstlisting}[style=CStyle]
+float evaluateStatistic
+(
+__global const float* in,
+int prime,
+int index,
+const unsigned int sampleSize, 
+const unsigned int cutPoint
+)
+{
+	float meanSample1 = 0;
+	float meanSample2 = 0;
+	float[prime - sampleSize] local;
+	int lastAllocatedIndex = 0;
+	
+	
+	for (int a = 0; a < sampleSize; a++)
+	{
+	
+		int realIndex = permutateSingle(index++, prime);
+		if (realIndex > sampleSize)
+			local[lastAllocatedIndex++] = in[realIndex];
+		else if (realIndex < cutPoint)
+			meanSample1 += in[realIndex];
+		else
+			meanSample2 += in[realIndex];
+	}
+	
+	for (int a = 0; a < prime - sampleSize; a++)
+	{
+		int realIndex = permutateSingle(index++, prime);
+		
+		if (realIndex > sampleSize)
+			local[lastAllocatedIndex++] = local[realIndex];
+		else if (realIndex < cutPoint)
+			meanSample1 += local[realIndex];	
+		else
+			meanSample2 += local[realIndex];
+	}
+	
+	meanSampel1 /= cutPoint;
+	meanSample2 /= sampleSize - cutPoint;	
+	
+	return abs(meanSample1 - meanSample2);
+}
+\end{lstlisting}
