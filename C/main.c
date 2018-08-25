@@ -114,7 +114,7 @@ uint64_t now()
 {
 	struct timeb timerBuffer;
 	ftime(&timerBuffer);
-	return (uint64_t) (((timerBuffer.time * 1000)+ timerBuffer.time));
+	return (uint64_t) (((timerBuffer.time * 1000)+ timerBuffer.millitm));
 }
 
 void testSpeed()

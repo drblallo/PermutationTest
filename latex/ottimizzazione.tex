@@ -1,4 +1,4 @@
-\section{Ottimizzazione}
+\section{Ottimizzazione} \label{ottimizzazione}
 
 \subsection{Permutazioni a spazio costante e visita ordinata}
 Poiché le computazioni avvengono in parallelo, non è posibile permutare sul posto i dati in ingresso, poiché ciò richiederebbe una quantità di memoria pari alla dimensione dei dati in ingresso moltiplicati per il numero di permutazioni, poiché ogni unità di calcolo deve allocare localmente i dati permutati. Risulta quindi imperativo utilizzare un algoritmo a spazio costante, poiché la memoria disponibile per ogni singolo core è limitata.
@@ -116,3 +116,6 @@ const unsigned int cutPoint
 	return abs(meanSample1 - meanSample2);
 }
 \end{lstlisting}
+
+
+Disponiamo quindi di un algoritmo che accede in maniera sequenziale a tutti gli elementi in memoria ed è capace di permutarli in parallelo utilizzando una quantità di memoria, oltre a quella richiesta dallo spazio dedicato all'input e all'output, costante.

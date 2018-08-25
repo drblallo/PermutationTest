@@ -33,7 +33,7 @@ float (*statistic)(Data* data)
 
 tale scrittura indica che il secondo parametro è una funzione che accetta un puntatore a Data e ritorna un float, cioè una funzione che rappresenta una statistica.
 
-la funzione diventa trivialmente.
+La funzione diventa trivialmente.
 
 \begin{lstlisting}[style=CStyle]
 
@@ -59,13 +59,20 @@ int runPermutationTest(Data *data, float (*statistic)(Data* data))
 }
 \end{lstlisting}
 
-La parte in cui si gestisce il caso >= del return è stato ignorato in favore della semplicità della descrizione.
+La parte in cui si gestisce il caso statistics[k] == sampleStatistic del return è stato ignorato in favore della semplicità della descrizione. In tali situazioni è sufficiente generare un numero casuale tra 0 e 1 e accettare il risultato se tale valore è inferiore ad alpha. Ciò garantisce che anche nel caso si esegua una permutazione sola il numero di falsi allarmi sarà esattamente alpha.
 
 
 \paragraph{OpenCL}
-\subparagraph{Riguardo opencl}
-Si è mostrato come l'implementazione in un linguaggio di programmazione regola risulta essere triviale, discuteremo ora di come implementare tale algoritmo in OpenCL, cioè uno dei linguaggi utilizzati dalle schede grafiche. Un programma OpenCL prende il nome di kernel. Un kernel è fondamentalmente una funzione che viene invocata da un normale programma risiedente nella macchina ospite della scheda. L'invocatore deve specificare quali sono i parametri di invocazione, e quale è l'area memoria dove il kernel può scrivere il risultato computato. 
-Risulta inoltre necessario specificare quante unità di calcolo vogliamo dedicare all'operazione, anche se tale valore non è accessibile all'interno di un programma OpenCl.
+
+Gli ultimi 15 anni hanno visto l'affermarsi della tecnologia delle schede grafiche come strumento utile alla computazione ad alta velocità.
+Progettate inizialmente per la creazione di immagini 3D da presentare a schermo, tali unità di calcolo presentano caratteristiche che le rendono adatte a eseguire calcoli in parallelo.
+Una scheda grafica è composta svariate unità di calcolo ognuna disposta dei propri registri privati, queste unità sono poi riunite in gruppi i quali condividono una memoria locale e infine tutte loro accedono alla stessa memoria globale. 
+I gruppi condividono anche parte delle componenti hardware, in particolare quelle legate al controllo del flusso del programma. Ciò implica che mentre il consumo energetico è minore rispetto alle cpu convenzionali, le unità di calcolo all'interno di un gruppo devono necessariamente eseguire le stesse operazioni. Tale tecnica prende il nome di SIMD, cioè Single Instruction Multiple Data, poiché disponendo di registri diversi per ogni nucleo di calcolo è possibile raggiungere risultati distinti su ognuno di essi, anche se la procedura è la stessa.
+
+Tale architettura permette quindi di accelerare tutti gli algoritmi che possono essere eseguiti in parallelo. Questo è esattamente il caso riguardante i permutation test, se si seleziona una statistica adatta, poiché le permutazione non necessitano di conoscere quale fosse stato il risultato della permutazione precedente, mentre i calcolo della statistica segue le stesse operazioni in ogni unità di calcolo.
+
+Si è mostrato come l'implementazione in un linguaggio di programmazione regolare risulta essere triviale, discuteremo ora di come implementare tale algoritmo in OpenCL, cioè uno dei linguaggi utilizzati dalle schede grafiche. Un programma OpenCL prende il nome di kernel. Un kernel è fondamentalmente una funzione che viene invocata da un normale programma risiedente nella macchina ospite della scheda. L'invocatore deve specificare quali sono i parametri di invocazione, e quale è l'area memoria dove il kernel può scrivere il risultato computato. 
+Inoltre è necessario specificare quante unità di calcolo vogliamo dedicare all'operazione, anche se tale valore non è accessibile all'interno di un programma OpenCl.
 
 Ad esempio supponiamo di voler scrivere un kernel che raddoppia il valore di ogni elemento di un array
 
@@ -86,9 +93,9 @@ Ogni core utilizzerà la funzione get\_global\_id per ricavare il proprio offset
 La keyword \_\_global serve per indicare alla scheda che è un riferimento alla memoria condivisa tra tutte le unità di calcolo. 
 
 \subparagraph{Implementazione permutation test}
-Risulta triviale identificare quale parti dell'implementazione descritta nella sezione \ref{impC}.
+Risulta triviale identificare quale parti dell'implementazione descritta nella sezione \ref{impC} sono adatti ad essere selezionati per essere svolti in parallelo.
 
-I dati originali vengono ospitati sulla scheda, il ciclo contenuto del ciclo for viene spostato nel kernel che si desidera scrivere mentre l'ordinamento e il confronto vengono operati sulla cpu.
+I dati originali vengono ospitati sulla scheda, il ciclo contenuto del ciclo for viene spostato, nel kernel che si desidera scrivere, mentre l'ordinamento e il confronto vengono operati sulla cpu.
 
 
 Risulta quindi che un kernel è composto dalla permutazione e dalla valutazione della statistica. 
@@ -111,11 +118,11 @@ Risulta quindi che un kernel è composto dalla permutazione e dalla valutazione 
 	}
 \end{lstlisting}
 
-La scrittura efficiente della statistica verrà analizzata nella sezione \ref{ottimizzazione}, quindi non verrà descritta ora.
+La scrittura efficiente della statistica verrà analizzata nella sezione \ref{ottimizzazione}, e
 L'intero problema si riduce alla capacità di permutare i dati in ingresso.
 
 Ciò è possibile basandosi sulla seguente osservazione:
-Sia P un numero primo qualsiasi, allora per tutti i numeri X, Y < P / 2 vale che (X * X) mod P != (Y * Y) mod P.
+Sia P un numero primo qualsiasi, allora $$ \forall X, Y  \in [0, P/ 2]  X \neq Y \Rightarrow (X * X) \% P \neq (Y * Y) \% P.$$
 Ciò significa che iterando attraverso tutti i numeri minori di P è possibile ottenere una sequenza di numeri che non si ripetono mai.
  
 \begin{lstlisting}[style=CStyle]
@@ -147,7 +154,7 @@ Il kernel diviene quindi, a patto che sample size sia uguale un numero primo .
 		float[sampleSize] permutated;
 		
 		for (int a = 0; a < sampleSize; a++)
-			permutated[i] =int[permutateSingle(a, sampleSize)];
+			permutated[i] =int[singlePermutate(a, sampleSize)];
 		
 		b[i] = evaluateStatistic(in, sampleSize, cutPoint, vectorSize);
 	}
@@ -157,4 +164,4 @@ Risulta quindi che tutto ciò che rimane da fare è ordinare i risultati e confr
 
 
 \subsection{Test Multivariati}
-Queste ottimizzazioni riguardano esclusivamente la maniera in cui si accede ai dati depositati nella memoria della scheda. Di conseguenza è possibile caricare dati sotto forma di struct, invece che semplici float. Risulta quindi raggiunto uno degli obbiettivi di tale documento, disponiamo di un implementazione di un test di ipotesi capace di operare su campioni multivariati che non necessita di precalcolare le soglie.
+Queste ottimizzazioni riguardano esclusivamente la maniera in cui si accede ai dati depositati nella memoria della scheda. Di conseguenza è possibile caricare dati sotto forma di struct, invece che semplici float. Risulta quindi raggiunto uno degli obiettivi di tale documento, disponiamo di un implementazione di un test di ipotesi capace di operare su campioni multivariati che non necessita di precalcolare le soglie.
