@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.7.15)  23 AUG 2018 18:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.7.15)  3 SEP 2018 13:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -631,26 +631,28 @@ Package fixltx2e Warning: fixltx2e is not required with releases after 2015
 (fixltx2e)                All fixes are now in the LaTeX kernel.
 (fixltx2e)                See the latexrelease package for details.
 
-) (./main.aux (./introduzione.aux) (./teoria.aux) (./implementazione.aux)
+)
+Package hyperref Info: Option `colorlinks' set `false' on input line 20.
+ (./main.aux (./introduzione.aux) (./teoria.aux) (./implementazione.aux)
 (./ottimizzazione.aux) (./risultati.aux))
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Info: Redefining \it@ocap on input line 42.
-LaTeX Info: Redefining \it@ccap on input line 42.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Info: Redefining \it@ocap on input line 45.
+LaTeX Info: Redefining \it@ccap on input line 45.
 \c@lstlisting=\count122
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
@@ -686,7 +688,7 @@ Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box29
-Package hyperref Info: Link coloring OFF on input line 42.
+Package hyperref Info: Link coloring OFF on input line 45.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -696,20 +698,20 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count129
 )
-LaTeX Info: Redefining \ref on input line 42.
-LaTeX Info: Redefining \pageref on input line 42.
-LaTeX Info: Redefining \nameref on input line 42.
+LaTeX Info: Redefining \ref on input line 45.
+LaTeX Info: Redefining \pageref on input line 45.
+LaTeX Info: Redefining \nameref on input line 45.
 
 (./main.out) (./main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 47.
+(Font)              <12> on input line 50.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 47.
+(Font)              <8> on input line 50.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 47.
+(Font)              <6> on input line 50.
  (./main.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 4.
@@ -742,7 +744,18 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 [3
 
 
-]) [4]
+] <processo.png, id=112, 803.0pt x 1284.8pt>
+File: processo.png Graphic file (type png)
+ <use processo.png>
+Package pdftex.def Info: processo.png used on input line 63.
+(pdftex.def)             Requested size: 241.49895pt x 386.4036pt.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 64.
+See the caption package documentation for explanation.
+
+[4]) [5 <./processo.png>]
 \openout2 = `implementazione.aux'.
 
  (./implementazione.tex
@@ -754,85 +767,123 @@ File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 9.
- [5
+ [6
 
 
-] [6] [7])
-[8]
+]
+<sequential.png, id=177, 361.35pt x 200.75pt>
+File: sequential.png Graphic file (type png)
+ <use sequential.png>
+Package pdftex.def Info: sequential.png used on input line 74.
+(pdftex.def)             Requested size: 180.67456pt x 100.37474pt.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 75.
+See the caption package documentation for explanation.
+
+<parallel.png, id=178, 401.5pt x 120.45pt>
+File: parallel.png Graphic file (type png)
+ <use parallel.png>
+Package pdftex.def Info: parallel.png used on input line 79.
+(pdftex.def)             Requested size: 200.7495pt x 60.22484pt.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 80.
+See the caption package documentation for explanation.
+
+[7 <./sequential.png (PNG copy)> <./parallel.png (PNG copy)>] [8]) [9] [10]
 \openout2 = `ottimizzazione.aux'.
 
- (./ottimizzazione.tex [9
+
+(./ottimizzazione.tex [11
 
 
-] [10]) [11]
+] [12]) [13]
 \openout2 = `risultati.aux'.
 
  (./risultati.tex
-<falsi_allarmi.png, id=335, 582.175pt x 401.5pt>
+<falsi_allarmi.png, id=359, 582.175pt x 401.5pt>
 File: falsi_allarmi.png Graphic file (type png)
  <use falsi_allarmi.png>
-Package pdftex.def Info: falsi_allarmi.png used on input line 7.
+Package pdftex.def Info: falsi_allarmi.png used on input line 8.
 (pdftex.def)             Requested size: 345.0pt x 237.93668pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 7--8
-[][] 
- []
 
-<potenza.png, id=337, 582.175pt x 401.5pt>
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 9.
+See the caption package documentation for explanation.
+
+<potenza.png, id=360, 582.175pt x 401.5pt>
 File: potenza.png Graphic file (type png)
  <use potenza.png>
-Package pdftex.def Info: potenza.png used on input line 13.
+Package pdftex.def Info: potenza.png used on input line 16.
 (pdftex.def)             Requested size: 345.0pt x 237.93668pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 13--14
-[][] 
- []
 
-[12
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 17.
+See the caption package documentation for explanation.
+
+[14
 
 
- <./falsi_allarmi.png>] <confronto.png, id=343, 582.175pt x 401.5pt>
+ <./falsi_allarmi.png>] <confronto.png, id=368, 582.175pt x 401.5pt>
 File: confronto.png Graphic file (type png)
 
 <use confronto.png>
-Package pdftex.def Info: confronto.png used on input line 21.
+Package pdftex.def Info: confronto.png used on input line 26.
 (pdftex.def)             Requested size: 345.0pt x 237.93668pt.
- [13 <./potenza.png>]
-<analisi.png, id=350, 582.175pt x 401.5pt>
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 27.
+See the caption package documentation for explanation.
+
+[15 <./potenza.png>] <analisi.png, id=375, 582.175pt x 401.5pt>
 File: analisi.png Graphic file (type png)
- <use analisi.png>
-Package pdftex.def Info: analisi.png used on input line 28.
+
+<use analisi.png>
+Package pdftex.def Info: analisi.png used on input line 35.
 (pdftex.def)             Requested size: 345.0pt x 237.93668pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 28--29
-[][] 
- []
 
-[14 <./confronto.png>] <ott.png, id=356, 1095.09125pt x 754.82pt>
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 36.
+See the caption package documentation for explanation.
+
+[16 <./confronto.png>] <ott.png, id=382, 1095.09125pt x 754.82pt>
 File: ott.png Graphic file (type png)
 
 <use ott.png>
-Package pdftex.def Info: ott.png used on input line 34.
+Package pdftex.def Info: ott.png used on input line 44.
 (pdftex.def)             Requested size: 345.0pt x 237.80411pt.
- [15 <./analisi.png>]) [16 <./ott.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 56.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 56.
- (./main.aux
-(./introduzione.aux) (./teoria.aux) (./implementazione.aux)
-(./ottimizzazione.aux) (./risultati.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 56.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 56.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 45.
+See the caption package documentation for explanation.
+
+[17 <./analisi.png>]) [18 <./ott.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 59.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 59.
+ (./main.aux (./introduzione.aux)
+(./teoria.aux) (./implementazione.aux) (./ottimizzazione.aux) (./risultati.aux)
+)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 59.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 59.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 7DE5A32CD4C4D85D91E743026C370D5E;1022.
+(rerunfilecheck)             Checksum: EA4560A440F938162D9D2A0E46C2468D;1022.
  ) 
 Here is how much of TeX's memory you used:
- 10557 strings out of 494942
- 149959 string characters out of 6180501
- 333143 words of memory out of 5000000
- 13460 multiletter control sequences out of 15000+600000
+ 10592 strings out of 494942
+ 150388 string characters out of 6180501
+ 333180 words of memory out of 5000000
+ 13476 multiletter control sequences out of 15000+600000
  14064 words of font info for 33 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 48i,6n,99p,835b,1935s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 48i,6n,99p,823b,1935s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/massimo/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0800.600pk> </home
 /massimo/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0500.600pk> </home/massimo/
 .texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </home/massimo/.texmf-va
@@ -849,10 +900,10 @@ dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmsy8.pfb>
-Output written on main.pdf (16 pages, 291886 bytes).
+Output written on main.pdf (18 pages, 422069 bytes).
 PDF statistics:
- 748 PDF objects out of 1000 (max. 8388607)
- 431 compressed objects within 5 object streams
- 217 named destinations out of 1000 (max. 500000)
- 154 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 787 PDF objects out of 1000 (max. 8388607)
+ 454 compressed objects within 5 object streams
+ 234 named destinations out of 1000 (max. 500000)
+ 169 words of extra memory for PDF output out of 10000 (max. 10000000)
 

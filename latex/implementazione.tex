@@ -2,7 +2,7 @@
 
 \subsection{Implementazione C} \label{impC}
 L'algoritmo è composto da due fasi, il calcolo delle statistiche per ogni permutazione e il confronto dei risultati ottenuti.
-Poiché il risultato deve essere un booleano che indica se le popolazioni dispongono delle stesse caratteristiche, e la statistica è indipendente dal test allora ne consegue la intestazione della stringa c può essere la seguente
+Poiché il risultato deve essere un booleano che indica se le popolazioni dispongono delle stesse caratteristiche, e la statistica è indipendente dal test allora ne consegue la intestazione della funzione c può essere la seguente
 
 
 \begin{lstlisting}[style=CStyle]
@@ -33,7 +33,7 @@ float (*statistic)(Data* data)
 
 tale scrittura indica che il secondo parametro è una funzione che accetta un puntatore a Data e ritorna un float, cioè una funzione che rappresenta una statistica.
 
-La funzione diventa trivialmente.
+La funzione risulta quindi essere:
 
 \begin{lstlisting}[style=CStyle]
 
@@ -68,10 +68,23 @@ Gli ultimi 15 anni hanno visto l'affermarsi della tecnologia delle schede grafic
 Progettate inizialmente per la creazione di immagini 3D da presentare a schermo, tali unità di calcolo presentano caratteristiche che le rendono adatte a eseguire calcoli in parallelo.
 Una scheda grafica è composta svariate unità di calcolo ognuna disposta dei propri registri privati, queste unità sono poi riunite in gruppi i quali condividono una memoria locale e infine tutte loro accedono alla stessa memoria globale. 
 I gruppi condividono anche parte delle componenti hardware, in particolare quelle legate al controllo del flusso del programma. Ciò implica che mentre il consumo energetico è minore rispetto alle cpu convenzionali, le unità di calcolo all'interno di un gruppo devono necessariamente eseguire le stesse operazioni. Tale tecnica prende il nome di SIMD, cioè Single Instruction Multiple Data, poiché disponendo di registri diversi per ogni nucleo di calcolo è possibile raggiungere risultati distinti su ognuno di essi, anche se la procedura è la stessa.
+\line(1,0){320}
+
+\begin{center}
+\includegraphics[scale=0.5]{sequential}
+\captionof{figure}{Processo Sequenziale}
+\end{center}
+\begin{center}
+
+	\includegraphics[scale=0.5]{parallel}
+	\captionof{figure}{Processo SIMD}
+\end{center}
+
+\line(1,0){320}
 
 Tale architettura permette quindi di accelerare tutti gli algoritmi che possono essere eseguiti in parallelo. Questo è esattamente il caso riguardante i permutation test, se si seleziona una statistica adatta, poiché le permutazione non necessitano di conoscere quale fosse stato il risultato della permutazione precedente, mentre i calcolo della statistica segue le stesse operazioni in ogni unità di calcolo.
 
-Si è mostrato come l'implementazione in un linguaggio di programmazione regolare risulta essere triviale, discuteremo ora di come implementare tale algoritmo in OpenCL, cioè uno dei linguaggi utilizzati dalle schede grafiche. Un programma OpenCL prende il nome di kernel. Un kernel è fondamentalmente una funzione che viene invocata da un normale programma risiedente nella macchina ospite della scheda. L'invocatore deve specificare quali sono i parametri di invocazione, e quale è l'area memoria dove il kernel può scrivere il risultato computato. 
+Si è mostrato come l'implementazione in un linguaggio di programmazione convenzionale risulta essere triviale, discuteremo ora di come implementare tale algoritmo in OpenCL, cioè uno dei linguaggi utilizzati dalle schede grafiche. Un programma OpenCL prende il nome di kernel. Un kernel è fondamentalmente una funzione che viene invocata da un normale programma risiedente nella macchina ospite della scheda. L'invocatore deve specificare quali sono i parametri di invocazione, e quale è l'area memoria dove il kernel può scrivere il risultato computato. 
 Inoltre è necessario specificare quante unità di calcolo vogliamo dedicare all'operazione, anche se tale valore non è accessibile all'interno di un programma OpenCl.
 
 Ad esempio supponiamo di voler scrivere un kernel che raddoppia il valore di ogni elemento di un array
@@ -93,7 +106,7 @@ Ogni core utilizzerà la funzione get\_global\_id per ricavare il proprio offset
 La keyword \_\_global serve per indicare alla scheda che è un riferimento alla memoria condivisa tra tutte le unità di calcolo. 
 
 \subparagraph{Implementazione permutation test}
-Risulta triviale identificare quale parti dell'implementazione descritta nella sezione \ref{impC} sono adatti ad essere selezionati per essere svolti in parallelo.
+Per scrivere un algoritmo in OpenCL è necessario identificare quale parti dell'implementazione descritta nella sezione \ref{impC} sono adatti ad essere selezionati per essere svolti in parallelo.
 
 I dati originali vengono ospitati sulla scheda, il ciclo contenuto del ciclo for viene spostato, nel kernel che si desidera scrivere, mentre l'ordinamento e il confronto vengono operati sulla cpu.
 
@@ -118,12 +131,17 @@ Risulta quindi che un kernel è composto dalla permutazione e dalla valutazione 
 	}
 \end{lstlisting}
 
-La scrittura efficiente della statistica verrà analizzata nella sezione \ref{ottimizzazione}, e
-L'intero problema si riduce alla capacità di permutare i dati in ingresso.
+La scrittura efficiente della statistica verrà analizzata nella sezione \ref{ottimizzazione}, e l'intero problema si riduce alla capacità di permutare i dati in ingresso.
 
 Ciò è possibile basandosi sulla seguente osservazione:
-Sia P un numero primo qualsiasi, allora $$ \forall X, Y  \in [0, P/ 2]  X \neq Y \Rightarrow (X * X) \% P \neq (Y * Y) \% P.$$
-Ciò significa che iterando attraverso tutti i numeri minori di P è possibile ottenere una sequenza di numeri che non si ripetono mai.
+Sia P un numero primo qualsiasi, allora $$ \forall X, Y  \in [0,  \frac{P}{2} ] :  X \neq Y \Rightarrow (X * X) \% P \neq (Y * Y) \% P.$$
+Ciò significa che se due numeri minori di $\frac{P}{2}$ sono diversi allora è diverso il loro quadrato modulo P, e questo garantisce che se i risultati calcolati dalla espressione
+
+$$F(x) = (x * x)\%P$$
+
+non si ripetano mai. Questa proprietà permette di costruire un una funzione biettiva da $[0, P] \Rightarrow [0, P]$ , cioè una permutazione pseudorandomica che opera in tempo e memoria costante.
+
+Il codice risulta quindi essere:
  
 \begin{lstlisting}[style=CStyle]
 unsigned int singlePermutate(unsigned int x, unsigned int prime)
@@ -160,7 +178,7 @@ Il kernel diviene quindi, a patto che sample size sia uguale un numero primo .
 	}
 \end{lstlisting}
 
-Risulta quindi che tutto ciò che rimane da fare è ordinare i risultati e confrontarli con la statistica dei dati non premutati. Ciò può svolto dal programma risiedente nella memoria principale della macchina, poiché è necessario attendere che tutte le statistiche vengano valutate e nel caso si utilizzasse più di una scheda non vi è alcuna garanzia che esse terminino in contemporanea. 
+Risulta quindi che tutto ciò che rimane da fare è ordinare i risultati e confrontarli con la statistica dei dati non premutati. Tale computazione può essere svolta dal programma risiedente nella memoria principale della macchina, poiché è necessario attendere che tutte le statistiche vengano valutate e nel caso si utilizzasse più di una scheda non vi è alcuna garanzia che esse terminino in contemporanea. 
 
 
 \subsection{Test Multivariati}

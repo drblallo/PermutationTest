@@ -1,7 +1,7 @@
 \section{Ottimizzazione} \label{ottimizzazione}
 
 \subsection{Permutazioni a spazio costante e visita ordinata}
-Poiché le computazioni avvengono in parallelo, non è posibile permutare sul posto i dati in ingresso, poiché ciò richiederebbe una quantità di memoria pari alla dimensione dei dati in ingresso moltiplicati per il numero di permutazioni, poiché ogni unità di calcolo deve allocare localmente i dati permutati. Risulta quindi imperativo utilizzare un algoritmo a spazio costante, poiché la memoria disponibile per ogni singolo core è limitata.
+Poiché le computazioni avvengono in parallelo, non è possibile permutare sul posto i dati in ingresso, poiché ciò richiederebbe una quantità di memoria pari alla dimensione dei dati in ingresso moltiplicati per il numero di permutazioni, poiché ogni unità di calcolo deve allocare localmente i dati permutati. Risulta quindi imperativo utilizzare un algoritmo a spazio costante, poiché la memoria disponibile per ogni singolo core è limitata.
 Si mostrerà ora come è possibile computare statistiche che operano in maniera sequenziale senza precalcolare la permutazione da applicare ai dati.
 
 Prendiamo come esempio la statistica che date due popolazioni ritorna la differenza delle loro medie.
@@ -66,8 +66,8 @@ La funzione deve quindi essere modificata in:
 Si noti che questo algoritmo dispone di un altra caratteristica, l'accesso alla memoria è sequenziale e tutti i nuclei accedono contemporaneamente allo stesso elemento. Poiché le memorie globali delle schede grafiche sono molto più lente che le memorie private, questa soluzione migliora sensibilmente le performance dell'algoritmo.
 
 \subsection{Campioni di dimensione qualsiasi}
-Come precedentemente indicato, per colpa del generatore di numeri casuali siamo costretti a utilizzare campioni la cui dimensione è un numero primo. Tale restrizione è particolarmente insoddisfacente, quindi si discuterà ora di come rimuoverla:
-Se la dimensione del campione è minore del numero primo è possibile allocare come variabile locale un array la cui dimensione è pari alla differenza tra i due numeri. Ogni volta che si estrae dalla permutazione un numero maggiore della dimensione del campione si salva il valore proveniente dall'array di input nell'array locale in maniera sequenziale. Dopo aver processato tutti gli elementi dell'array globale si processano nuovamente tutti quelli allocati localmente, con la garanzia che ora l'indice estratto sarà minore della dimensione del campione, poiché tutti gli indici maggiori sono già stati valutati.
+Come precedentemente indicato, la natura del generatore di numeri casuali impone l'uso di campioni la cui dimensione è un numero primo. Tale restrizione è particolarmente insoddisfacente, quindi si discuterà ora di come rimuoverla:
+Se la dimensione del campione è troppo distante da un numero primo è possibile allocare come variabile locale un array la cui dimensione è pari alla differenza tra la dimensione e il minimo primo maggiore della dimensione stessa. Ogni volta che si estrae dalla permutazione un numero maggiore della dimensione del campione si salva il valore proveniente dall'array di input nell'array locale in maniera sequenziale. Dopo aver processato tutti gli elementi dell'array globale si processano nuovamente tutti quelli allocati localmente, con la garanzia che ora l'indice estratto sarà minore della dimensione del campione, poiché tutti gli indici maggiori sono già stati valutati.
 
 
 \begin{lstlisting}[style=CStyle]
